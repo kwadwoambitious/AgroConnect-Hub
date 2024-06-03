@@ -1,0 +1,69 @@
+.blur-md {
+  filter: blur(10px);
+  background-color: #00000082;
+}
+
+.transition-opacity {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+.relative {
+  position: relative;
+}
+.absolute-center {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+.bg-white {
+  background-color: white;
+}
+.opacity-60 {
+  opacity: 0.6;
+}
+.rounded-full {
+  border-radius: 50%;
+}
+.z-10 {
+  z-index: 10;
+}
+
+.bg-cover {
+  background-size: cover;
+}
+.bg-center {
+  background-position: center;
+}
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
+}
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.bg-black {
+  background-color: black;
+}
+.opacity-40 {
+  opacity: 0.4;
+}
+.z-10 {
+  z-index: -1;
+}
