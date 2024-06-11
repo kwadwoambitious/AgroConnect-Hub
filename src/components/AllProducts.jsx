@@ -2,16 +2,42 @@ import React, { useState } from 'react'
 import NavBar from './NavBar'
 import logo from '../assets/images/LOGO.webp'
 import { LuSearch } from "react-icons/lu"
-import Products from './Products.js';
 import Footer from './Footer'
+import Products from '../Products'
 
-function ProductCard({ product }) {
+function ProductCard({ product, index }) {
+
+  const [loaded, setLoaded] = useState(Array(Products.length).fill(false));
+
+  const handleImageLoad = (index) => {
+    setLoaded((prevState) => {
+      const newLoaded = [...prevState];
+      newLoaded[index] = true;
+      return newLoaded;
+    });
+  };
+
   return (
-    <div className="bg-white shadow-md rounded-md p-4 md:p-6 lg:p-8">
-      <h2 className="font-bold text-lg">{product.name}</h2>
-      <p className="text-gray-600">Quantity: {product.quantity}</p>
-      <p className="text-gray-600">Price: ${product.price}</p>
-      <p className="text-gray-600">Location: {product.location}</p>
+    <div className="bg-white shadow-md  max-w-[270px] md:max-w-[300px] rounded-[20px] md:rounded-xl mx-auto w-full mb-[24px]">
+      <div className="relative w-full md:h-60 h-48 rounded-tl-[20px] rounded-tr-[20px] md:rounded-tl-xl md:rounded-tr-xl overflow-hidden">       
+      {!loaded[index] && <div className="absolute inset-0 bg-gray-300 blur-md"></div>}
+              <img
+                loading="lazy"
+                src={product.image}
+                alt={product.alt}
+                className={`w-full h-full object-cover transition-opacity duration-500 ${loaded[index] ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => handleImageLoad(index)}
+              />
+      </div>
+
+      <h2 className="font-medium mt-3 text-[11px] md:text-[18px] text-[#000000cc] px-4">{product.name}</h2>
+      <p className="font-medium text-[10px] md:text-[16px] px-4">
+        <span className="text-[#2E982D]">{product.quantity}</span> / {product.price}
+      </p>
+      <p className="text-[10px] md:text-[16px] font-medium px-4">Location: {product.location}</p>
+      <button className="bg-[#2E982D] w-[90%] text-white py-2 md:py-4 mt-3 mb-4 block mx-auto md:mx-4 text-[12px] sm:text-sm md:text-lg font-semibold rounded-[20px]">
+          Buy now
+      </button>
     </div>
   );
 }
@@ -55,7 +81,7 @@ const AllProducts = () => {
 
       <div className='font-poppins bg-[#F4F5FF] lg:gap-x-10 px-5 xl:px-32 py-20 lg:py-40'>
         
-      <h2 className='font-medium text-[20px] sm:text-3xl text-center uppercase'>Explore Our Market</h2>
+      <h2 className='font-medium text-[20px] sm:text-4xl text-center uppercase'>Explore Our Market</h2>
       <p className='font-light sm:text-xl text-center'>Don't wait - get what you want today!</p>
 
       <form className='mt-7 w-full flex items-center justify-center'>
@@ -71,8 +97,9 @@ const AllProducts = () => {
 
       {filteredProducts.length > 0 ? (
         <div className="mt-12 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2 sm:gap-0 md:gap-5">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.name} product={product} />
+          
+          {filteredProducts.map((product, index) => (
+             <ProductCard key={index} product={product} index={index} />
           ))}
         </div>
       ) : (
