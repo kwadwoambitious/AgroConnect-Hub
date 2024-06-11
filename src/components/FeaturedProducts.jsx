@@ -72,7 +72,7 @@ const FeaturedProducts = () => {
 
   return (
     <div className='font-poppins px-2 xl:px-32 py-20'>
-      <h2 className='font-medium text-[20px] sm:text-3xl text-center'>FEATURED PRODUCTS</h2>
+      <h2 className='font-medium text-[20px] sm:text-4xl text-center'>FEATURED PRODUCTS</h2>
       <p className='font-light sm:text-xl text-center'>We offer the finest products sourced from our hardworking farmers!</p>
       <div className='w-full mt-12 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2 sm:gap-0 md:gap-5'>
         {products.map((product, index) => (

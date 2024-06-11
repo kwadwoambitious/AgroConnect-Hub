@@ -35,7 +35,7 @@ const ContactUs = () => {
         {/* container for the navbar and the hero section ends here */}
 
         <div className='bg-[#F4F5FF] w-full px-5 xl:px-32 py-20 lg:py-40'>
-          <h2 className='font-medium text-[20px] sm:text-3xl text-center uppercase'>Contact Us</h2>
+          <h2 className='font-medium text-[20px] sm:text-4xl text-center uppercase'>Contact Us</h2>
           <p className='font-light sm:text-xl text-center'>We're available around the clock to assist you promptly!</p>
           <div className='max-w-[600px] lg:max-w-[1000px] bg-white mx-auto flex mt-14 shadow-xl shadow-[#0000001f] rounded-lg'>
               <div className='w-full lg:w-[55%] px-4 py-8 lg:p-10'>

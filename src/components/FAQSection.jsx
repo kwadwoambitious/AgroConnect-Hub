@@ -39,7 +39,7 @@ const FAQSection = () => {
 
   return (
     <div className='font-poppins px-5 xl:px-32 py-20 bg-[#F4F5FF]'>
-      <h2 className='font-medium text-[20px] sm:text-3xl text-center'>FREQUENTLY ASKED QUESTIONS</h2>
+      <h2 className='font-medium text-[20px] sm:text-4xl text-center'>FREQUENTLY ASKED QUESTIONS</h2>
       <p className='font-light sm:text-xl text-center'>Below are some common questions you may want to ask!</p>
       <div className='mt-12'>
         {faqs.map((faq, index) => (

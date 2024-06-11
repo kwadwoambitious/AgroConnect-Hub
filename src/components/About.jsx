@@ -81,7 +81,7 @@ const About = () => {
                   transition={{ duration: 0.05 }}
                   className="flex flex-wrap justify-center flex-col"
                 >
-                <h2 className='font-medium text-[20px] sm:text-3xl text-center'>OUR MISSIONS</h2>
+                <h2 className='font-medium text-[20px] sm:text-4xl text-center'>OUR MISSIONS</h2>
                 <p className='font-light sm:text-xl text-center'>Here is what AgroConnect Hub aims to do!</p>
                 <div className='mt-12 flex items-start justify-center gap-10 flex-wrap'>
                   <div className='max-w-[300px] md:max-w-[350px] shadow-xl shadow-[#0000001f] p-6 border-[2px] rounded-lg'>
@@ -114,7 +114,7 @@ const About = () => {
                   transition={{ duration: 0.05 }}
                   className="flex flex-wrap justify-center flex-col"
                 >
-                <h2 className='font-medium text-[20px] sm:text-3xl text-center'>OUR VALUES</h2>
+                <h2 className='font-medium text-[20px] sm:text-4xl text-center'>OUR VALUES</h2>
                 <p className='font-light sm:text-xl text-center'>Guiding Principles that Shape our Culture and Actions!</p>
                 <div className='mt-12 flex items-start justify-center gap-10 flex-wrap'>
                   <div className='max-w-[300px] md:max-w-[350px] shadow-xl shadow-[#0000001f] p-6 border-[2px] rounded-lg'>
