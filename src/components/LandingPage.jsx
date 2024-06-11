@@ -3,11 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar'
 import Footer from './Footer'
 import heroImage from '../assets/images/Hero image 1.webp'
-import pineappleImage from '../assets/images/pineapple.png'
-import strawberryImage from '../assets/images/strawberry.png'
-import bananaImage from '../assets/images/banana.png'
-import carrotImage from '../assets/images/carrot.png'
-import greenPepperImage from '../assets/images/green-pepper.png'
+import pattern1 from '../assets/images/pattern1.png'
+import pattern2 from '../assets/images/pattern2.png'
 import consumerImage from '../assets/images/CONSUMER PICTURE.webp'
 import consumerImage2 from '../assets/images/CONSUMER PICTURE(1).webp'
 import ratingImage1 from '../assets/images/RATING STARS.webp'
@@ -91,19 +88,16 @@ const LandingPage = () => {
       )}
 
       {/* container for the navbar and the hero section */}
-      <div className='w-full h-screen bg-gradient-to-tr from-[#0F320F] to-[#2E982D] flex flex-col'>
+      <div className='w-full bg-gradient-to-tr from-[#0F320F] to-[#2E982D] flex flex-col'>
           {/* navBar component */}
           <NavBar className='block' logoImage={logo} textColor='text-white' iconColor='text-white' />
           {/* navBar component ends here */}
 
           {/* hero section container */}
-          <div className='flex h-full items-center justify-center px-5 2xl:px-32 sm:py-10 -z-0 relative'>
+          <div className='flex items-center justify-center flex-wrap gap-y-6 g px-5 2xl:px-32 sm:py-10 -z-0 relative mt-28 pb-20 pt-10 lg:pb-40 lg:pt-20'>
           <div className='relative'>
-            <img src={pineappleImage} alt='pineapple' className='w-20 md:w-32 absolute left-[70%] lg:left-[60%] -top-[60px] lg:-top-[90px] rotate-12 z-0 opacity-40 md:opacity-50' />
-            <img src={strawberryImage} alt='strawberry' className='w-20 md:w-32 absolute left-0 -top-[40px] lg:-top-[60px] rotate-12 z-0 opacity-40 md:opacity-50' />
-            <img src={bananaImage} alt='banana' className='w-20 md:w-28 absolute lg:left-1/2 right-0 bottom-[30%] lg:bottom-[20%] rotate-12 z-0 opacity-40 md:opacity-50' />
-            <img src={greenPepperImage} alt='green pepper' className='w-20 md:w-32 absolute top-[70px] lg:top-[140px] left-[30%] lg:left-[25%] rotate-12 z-0 opacity-40 md:opacity-50' />
-            <img src={carrotImage} alt='carrot' className='w-20 md:w-32 absolute -top-[50px] lg:-top-[70px] left-[40%] lg:left-[30%] rotate-12 z-0 opacity-40 md:opacity-50' />
+            <img src={pattern2} alt='strawberry' className='w-20 md:w-52 absolute left-0 -top-[40px] lg:-top-[60px] rotate-12 z-0' />
+            <img src={pattern1} alt='banana' className='w-20 md:w-52 absolute lg:left-1/2 right-0 bottom-[30%] lg:bottom-[20%] rotate-12 z-0' />
             <h1 className='text-[30px] md:text-[53px] lg:max-w-2xl text-center lg:text-left text-white font-bold z-50 relative capitalize leading-[1.2]'>
               Get access to fresh, locally sourced products directly from the farm!
             </h1>
@@ -115,8 +109,8 @@ const LandingPage = () => {
             </button>
           </div>
 
-          <div className='hidden lg:block'>
-            <div className='relative w-[583px] max-h-[500px]'>
+          <div className='lg:block'>
+            <div className='relative max-w-[700px] max-h-[500px]'>
               {!imageLoaded && (
                 <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-xl blur-md">
                   {/* <span className="text-gray-500">Loading...</span> */}
@@ -152,7 +146,7 @@ const LandingPage = () => {
 
       {/* user's reviews section */}
       <div className='font-poppins px-5 lg:px-32 py-20'>
-        <h2 className='font-medium text-[20px] sm:text-3xl text-center'>WHAT OUR CONSUMERS SAY</h2>
+        <h2 className='font-medium text-[20px] sm:text-4xl text-center'>WHAT OUR CONSUMERS SAY</h2>
         <p className='font-light sm:text-xl text-center'>Here's what our satisfied consumers are saying!</p>
         <div className='flex items-center justify-center mt-12 sm:mt-14 gap-y-14 gap-x-24 flex-wrap'>
           {/* first review */}
