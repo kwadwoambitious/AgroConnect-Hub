@@ -48,10 +48,10 @@ const NavBar = ({ logoImage, textColor }) => {
 
   return (
     <div className='flex justify-center'>
-      <div className="fixed flex items-center justify-center top-0 w-[100%] h-16 lg:h-28 bg-opacity-50 backdrop-blur-lg z-50 mx-auto lg:rounded-full">
-      <div className={`w-[95%] md:w-[90%] mx-auto flex items-center justify-between px-5 2xl:px-24 fixed top-0 z-50 mt-1 lg:mt-4 rounded-full ${isScrolled ? 'bg-[#2E982D] shadow-xl shadow-[#0000001f] py-3 md:py-3 lg:py-2' : 'py-5'}`}>
+      <div className="fixed flex items-center justify-center top-0 w-[100%] h-16 lg:h-24 bg-opacity-50 backdrop-blur-lg z-50 mx-auto lg:rounded-full">
+      <div className={`w-[95%] md:w-[100%] mx-auto flex items-center justify-between px-5 2xl:px-24 fixed top-0 z-50 mt-1 md:mt-0 rounded-full md:rounded-none ${isScrolled ? 'bg-[#2E982D] shadow-xl shadow-[#0000001f] py-3 md:py-10 lg:py-5' : 'py-5'}`}>
         <div>
-            <img loading='lazy' src={logoImage} alt='Logo' className='w-24 md:w-44'/>
+            <NavLink to='/'><img loading='lazy' src={logoImage} alt='Logo' className='w-24 md:w-44'/></NavLink>
         </div>
         {isOpen ? (
                 <motion.div initial="closed" animate="open" exit="closed" variants={iconVariants} transition={{ duration: 0.5 }}>
