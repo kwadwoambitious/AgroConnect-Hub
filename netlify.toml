@@ -1,0 +1,6 @@
+[build]
+  publish = "./build"
+  command = "npm run build"
+[build.components]
+  publish = "./build/components"
+  command = "npm run build:components"
