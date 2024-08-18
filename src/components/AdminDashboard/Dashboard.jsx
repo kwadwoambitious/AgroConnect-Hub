@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { MdOutlineClose } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import CreateNewProduct from "./CreateNewProduct";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = ({ adminName }) => {
   const [activeContent, setActiveContent] = useState("create-product");
@@ -15,6 +18,22 @@ const Dashboard = ({ adminName }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [imageCover, setImageCover] = useState("");
   const [images, setImages] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userInitials");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("token");
+    
+    toast.success("Logout successful!", {
+      autoClose: 2000,
+    });
+
+    // Redirect to home or login page
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -253,6 +272,14 @@ const Dashboard = ({ adminName }) => {
             </li>
           </ul>
         </nav>
+        {/* <div className="absolute w-[70%] mx-auto bottom-[70px]"> */}
+          <button
+            onClick={handleLogout}
+            className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-red-500 text-white font-medium mt-60 rounded-md"
+          >
+            Logout
+          </button>
+        {/* </div> */}
       </div>
 
       <div className="flex-1 h-svh flex flex-col px-2 lg:px-10">
@@ -262,21 +289,22 @@ const Dashboard = ({ adminName }) => {
 
         {renderContent()}
       </div>
+      <ToastContainer />
 
       {/* Create New Product Modal */}
       {createNewProductModal && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
-            onClick={(e) => {
-              // Close the modal when clicking on the overlay, not when clicking inside the modal
-              if (e.target === e.currentTarget) {
-                setCreateNewProductModal(false);
-              }
-            }}
-          >
-            <CreateNewProduct onSuccess={handleProductCreationSuccess} />
-          </div>
-        )}
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+          onClick={(e) => {
+            // Close the modal when clicking on the overlay, not when clicking inside the modal
+            if (e.target === e.currentTarget) {
+              setCreateNewProductModal(false);
+            }
+          }}
+        >
+          <CreateNewProduct onSuccess={handleProductCreationSuccess} />
+        </div>
+      )}
 
       {/* Update Product Modal */}
       {updateModalVisible && (
