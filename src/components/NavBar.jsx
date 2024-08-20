@@ -236,6 +236,7 @@ const NavBar = ({ logoImage, textColor }) => {
           isCartOpen={isCartOpen}
           cartCount={cartCount}
           cartRef={cartRef}
+          
         />
       </AnimatePresence>
     </div>

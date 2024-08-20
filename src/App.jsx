@@ -12,10 +12,11 @@ import AllProducts from "./components/AllProducts";
 import Category from "./components/Category";
 import Profile from "./components/Profile";
 import RouteLoader from "./components/RouteLoader";
-import { CartProvider } from './components/CartContext';
+import { CartProvider } from "./components/CartContext";
 import "./App.css";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import Dashboard from "./components/AdminDashboard/Dashboard";
+import Checkout from "./components/Checkout";
 // import { ToastContainer } from 'react-toastify';
 
 function App({ showModal }) {
@@ -40,7 +41,7 @@ function App({ showModal }) {
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/shop" element={<AllProducts />} />
               <Route path="/category/:categoryName" element={<Category />} />
-              
+
               {/* Protect the /admin-dashboard route for admins */}
               <Route
                 path="/admin-dashboard"
@@ -48,6 +49,16 @@ function App({ showModal }) {
                   <ProtectedRoute
                     element={<Dashboard />}
                     requiredRole="admin"
+                  />
+                }
+              />
+
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute
+                    element={<Checkout />}
+                    
                   />
                 }
               />

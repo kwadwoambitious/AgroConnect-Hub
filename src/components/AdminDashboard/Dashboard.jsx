@@ -314,6 +314,125 @@ const Dashboard = ({ adminName }) => {
     }
   };
 
+  // New state for the update modal
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateProductData, setUpdateProductData] = useState({
+    imageCover: "",
+    images: "",
+  });
+
+  // Function to handle update button click
+  const handleUpdateClick = (product) => {
+    setSelectedProduct(product);
+    setUpdateProductData({
+      imageCover: product.imageCover || "",
+      images: product.images.join(", ") || "", // Convert array to comma-separated string
+    });
+    setShowUpdateModal(true);
+  };
+
+  // Function to handle input changes in the update modal
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateProductData({ ...updateProductData, [name]: value });
+  };
+
+  // Function to handle updating the product
+const handleUpdateProduct = async () => {
+  try {
+    // Sending PATCH request to update the product
+    const response = await axios.patch(
+      `https://api-agroconnect.onrender.com/api/v1/products/${selectedProduct._id}`,
+      {
+        imageCover: updateProductData.imageCover,
+        images: updateProductData.images.split(",").map((img) => img.trim()), // Convert string to array
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    
+    // Check if the response contains the expected data
+    if (response.data && response.data.data) {
+      const updatedProduct = response.data.data;
+      
+      // Update the product list with the newly updated product
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product._id === selectedProduct._id
+            ? updatedProduct
+            : product
+        )
+      );
+      toast.success("Product updated successfully!", { autoClose: 2000 });
+      setShowUpdateModal(false);
+    } else {
+      console.error("Unexpected response structure:", response.data);
+      toast.error("Failed to update product.", { autoClose: 2000 });
+    }
+  } catch (error) {
+    // Enhanced error logging
+    console.error("Error updating product:", error);
+    console.error("Error details:", error.response ? error.response.data : error.message);
+    console.log("Selected Product ID:", selectedProduct._id);
+    console.log("Products are: ", products)
+    console.log("ImageCover:", updateProductData.imageCover);
+    console.log("Images Array:", updateProductData.images.split(",").map((img) => img.trim()));
+
+    toast.error("Failed to update product.", { autoClose: 2000 });
+  }
+};
+
+
+  // JSX for the Update Modal
+  const UpdateProductModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-xl font-medium mb-4">{`Update Product (${selectedProduct.name})`}</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">
+            Image Cover URL
+          </label>
+          <input
+            type="text"
+            name="imageCover"
+            value={updateProductData.imageCover}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">
+            Images URLs (comma-separated)
+          </label>
+          <input
+            type="text"
+            name="images"
+            value={updateProductData.images}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+        <div className="flex justify-end gap-2">
+          <button
+            className="bg-red-500 text-white py-2 px-4 rounded-md"
+            onClick={() => setShowUpdateModal(false)}
+          >
+            Close
+          </button>
+          <button
+            className="bg-[#2E982D] text-white py-2 px-4 rounded-md"
+            onClick={handleUpdateProduct}
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex h-full md:h-svh">
       <div className="lg:hidden fixed top-4 left-4 z-50">
@@ -430,6 +549,11 @@ const Dashboard = ({ adminName }) => {
           onDeleteSuccess={handleDeleteSuccess}
         />
       )}
+
+      <div>
+        {/* Existing renderContent function and other UI elements */}
+        {showUpdateModal && <UpdateProductModal />}
+      </div>
     </div>
   );
 };

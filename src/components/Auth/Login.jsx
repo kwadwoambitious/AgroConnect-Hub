@@ -1,103 +1,111 @@
-  import React, { useState } from "react";
-  import { BsEyeSlash, BsEye } from "react-icons/bs";
-  import loginImage from "../../assets/images/login-image.jpg";
-  import { Link, useNavigate } from "react-router-dom";
-  import axios from "axios";
-  import { ToastContainer, toast } from "react-toastify";
-  import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from "react";
+import { BsEyeSlash, BsEye } from "react-icons/bs";
+import loginImage from "../../assets/images/login-image.jpg";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-  const Login = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
-    const [formData, setFormData] = useState({
-      email: "",
-      password: "",
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  };
 
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    };
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
+  const handleShowPassword = (event) => {
+    event.preventDefault();
+    setShowPassword(!showPassword);
+  };
 
-    const handleFocus = () => setIsFocused(true);
-    const handleBlur = () => setIsFocused(false);
-    const handleShowPassword = (event) => {
-      event.preventDefault();
-      setShowPassword(!showPassword);
-    };
-
-    const handleLoginSubmit = async (event) => {
-      event.preventDefault();
-      setLoading(true); // Start loading
-      const baseURL = "https://api-agroconnect.onrender.com";
-      try {
-        const response = await axios.post(
-          `${baseURL}/api/v1/users/login`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-    
-        console.log("Full response:", response);
-        console.log("Response data:", response.data);
-    
-        const { status, token, data } = response.data;
-        const user = data?.user;
-    
-        if (status !== "success" || !user || !token) {
-          throw new Error("User or token is missing in the response");
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true); // Start loading
+    const baseURL = "https://api-agroconnect.onrender.com";
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/v1/users/login`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-    
-        toast.success("Login successful!", {
-          autoClose: 2000,
-        });
-        console.log("Login successful:", response.data);
-    
-        const userInitials = `${user.name[0]}`;
-        const firstName = `${user.name.split(" ")[0]}`;
-        const userName = `${user.name}`;
-        const userEmail = `${user.email}`;
-        const userPhone = `${user.phone}`;
-        
-        localStorage.setItem("userName", userName);
-        localStorage.setItem("userEmail", userEmail);
-        localStorage.setItem("userPhone", userPhone);
-        localStorage.setItem("userInitials", userInitials);
-        localStorage.setItem("firstName", firstName);
-        localStorage.setItem("token", token);
-        localStorage.setItem("userRole", user.role);
-    
-        // Clear success message and navigate based on role after 2 seconds
-        setTimeout(() => {
-          if (user.role === "admin") {
-            navigate("/admin-dashboard");
-          } else {
-            navigate("/shop");
-          }
-        }, 2000);
-      } catch (error) {
-        console.error("Error during login:", error);
-        toast.error(error.response?.data?.message || "Login failed. Please try again.", {
-          autoClose: 2000,
-        });
-        console.error("Error during login:", error.response?.data);
-    
-      } finally {
-        setLoading(false); 
-      }
-    };
+      );
 
-    return (
-      <>
-        <div className="h-svh lg:h-screen py-10 lg:py-0 flex items-center w-full">
+      console.log("Full response:", response);
+      console.log("Response data:", response.data);
+
+      const { status, token, data } = response.data;
+      const user = data?.user;
+
+      if (status !== "success" || !user || !token) {
+        throw new Error("User or token is missing in the response");
+      }
+
+      toast.success("Login successful!", {
+        autoClose: 2000,
+      });
+      console.log("Login successful:", response.data);
+
+      const userInitials = `${user.name[0]}`;
+      const firstName = `${user.name.split(" ")[0]}`;
+      const userName = `${user.name}`;
+      const userEmail = `${user.email}`;
+      const userPhone = `${user.phone}`;
+
+      localStorage.setItem("userName", userName);
+      localStorage.setItem("userEmail", userEmail);
+      localStorage.setItem("userPhone", userPhone);
+      localStorage.setItem("userInitials", userInitials);
+      localStorage.setItem("firstName", firstName);
+      localStorage.setItem("token", token);
+      localStorage.setItem("userRole", user.role);
+
+      // Clear success message and navigate based on role after 2 seconds
+      setTimeout(() => {
+        const redirectPath =
+          sessionStorage.getItem("redirectAfterLogin") || "/";
+        sessionStorage.removeItem("redirectAfterLogin"); // Clear the redirect path
+        navigate(redirectPath);
+
+        if (user.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/shop");
+        }
+        
+      }, 2000);
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast.error(
+        error.response?.data?.message || "Login failed. Please try again.",
+        {
+          autoClose: 2000,
+        }
+      );
+      console.error("Error during login:", error.response?.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="h-svh lg:h-screen py-10 lg:py-0 flex items-center w-full">
           <div className="h-screen w-[45%] object-cover hidden lg:block relative">
             <img
               loading="lazy"
@@ -206,8 +214,8 @@
             <ToastContainer/>
           </div>
         </div>
-      </>
-    );
-  };
+    </>
+  );
+};
 
-  export default Login;
+export default Login;

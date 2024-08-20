@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
 import { LiaShoppingBagSolid } from "react-icons/lia";
-import { BsCartX } from "react-icons/bs";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { BsCartX } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { useCart } from "../CartContext"; // Import the useCart hook
+import { useCart } from "../CartContext";
+import { toast } from "react-toastify";
 
 const cartOverlayVariants = {
   hidden: { opacity: 0, transition: { duration: 0.2, delay: 0 } },
@@ -23,82 +24,129 @@ const cartVariants = {
 };
 
 const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
-  const { cartCount, addToCart } = useCart(); // Access cartCount and addToCart from context
+  const { cart, removeFromCart } = useCart();
 
-  // Function to empty the cart
-  const emptyCart = () => {
-    addToCart(-cartCount); // Decrement cart count to zero
+  // Calculate the total amount
+  const calculateTotalAmount = () => {
+    const total = cart.reduce((total, product) => total + product.price * product.quantity, 0);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GHS' }).format(total);
+  };
+
+  const handleRemove = (product) => {
+    removeFromCart(product._id);
+    toast.success(`${product.name} removed from cart`, {
+      autoClose: 2000,
+    });
   };
 
   return (
-    <div>
+    <AnimatePresence>
       {isCartOpen && (
-        <AnimatePresence>
+        <motion.div
+          className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-md z-[90] h-full"
+          onClick={(e) => {
+            // Close the modal when clicking on the overlay, not when clicking inside the modal
+            if (e.target === e.currentTarget) {
+              setIsCartOpen(false);
+            }
+          }}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={cartOverlayVariants}
+        >
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-md z-[90] h-full"
-            onClick={() => setIsCartOpen(false)}
+            className="fixed top-0 right-0 bottom-0 w-[300px] md:w-[350px] bg-white z-[99] border-l border-gray-200 shadow-lg overflow-y-scroll"
+            variants={cartVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
-            variants={cartOverlayVariants}
           >
-            <AnimatePresence>
-              <motion.div
-                className="fixed right-0 top-0 h-full w-[90%] max-w-[470px] bg-white z-60 shadow-[-12px_0px_29px_0px_rgba(0,0,0,0.1)]"
-                ref={cartRef}
-                onClick={(e) => e.stopPropagation()}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                variants={cartVariants}
+            <div className="flex justify-between items-center p-6 md:py-8 border-b">
+              <h2 className="text-xl md:text-2xl text-[#0F172A] font-semibold">
+                Shopping cart
+              </h2>
+              <button
+                className="text-gray-600"
+                onClick={() => setIsCartOpen(false)}
               >
-                <div className="flex justify-between items-center p-6 md:py-8 border-b">
-                  <h2 className="text-xl md:text-2xl text-[#0F172A] font-semibold">
-                    Shopping cart
-                  </h2>
+                <IoCloseCircleOutline className="text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out cursor-pointer" />
+              </button>
+            </div>
+            <div className="py-4 px-6">
+              {cart.length > 0 ? (
+                cart.map((product) => (
+                  <div
+                    key={product._id}
+                    className="flex items-center justify-between mb-4"
+                  >
+                    <div className="flex items-center gap-x-2 md:gap-x-5">
+                      <img
+                        src={product.imageCover}
+                        alt={product.name}
+                        className="w-16 h-16 object-cover rounded-md"
+                      />
+                      <div>
+                        <p className="font-semibold text-[13px] md:text-base text-gray-800">
+                          {product.name}
+                        </p>
+                        <p className="text-gray-500 text-[12px] md:text-[15px]">
+                          GHS {product.price} x {product.quantity}
+                        </p>
+                        <p className="text-gray-800 font-semibold text-[13px] md:text-[15px]">
+                          Total: GHS {product.price * product.quantity}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleRemove(product)}
+                      className="text-red-500 hover:text-red-700 transition duration-300 text-[12px] md:text-[15px]"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <BsCartX className="text-[#EDEDED] text-[120px]" />
+                  <p className="font-medium text-sm mt-8">
+                    No products in the cart.
+                  </p>
+                  <Link
+                    to="/shop"
+                    className="uppercase bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl transition duration-250 ease-in-out text-white font-semibold p-3 rounded-md mt-8 flex items-center justify-center group"
+                    onClick={() => setIsCartOpen((prev) => !prev)}
+                  >
+                    <span className="text-[12px] leading-none">
+                      Return to shop
+                    </span>
+                    <LiaShoppingBagSolid className="text-[20px] font-bold ml-1 leading-none inline-block transition-transform group-hover:translate-x-1 duration-300 ease-in-out" />
+                  </Link>
+                </div>
+              )}
+            </div>
+            {cart.length > 0 ? (
+              <div className="py-4 px-6 border-t border-gray-300">
+                <div className="flex justify-between mb-6">
+                  <span className="font-semibold text-gray-800">Total Amount:</span>
+                  <span className="font-semibold text-gray-800">{calculateTotalAmount()}</span>
+                </div>
+                <Link to="/checkout">
                   <button
-                    className="text-gray-600"
+                    className="block w-full mx-auto bg-[#2E982D] hover:bg-[#1e6a1e] text-white py-2 rounded text-[14px] md:text-[15px]"
                     onClick={() => setIsCartOpen(false)}
                   >
-                    <IoCloseCircleOutline className="text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out cursor-pointer" />
+                    Proceed to checkout
                   </button>
-                </div>
-                <div className="p-4 md:p-10">
-                  {cartCount > 0 ? (
-                    <div>
-                      <p>Number of products in cart: {cartCount}</p>
-                      <button
-                        className="bg-[#E03C31] hover:bg-[#d0281a] text-white font-semibold p-3 rounded-md mt-4 flex items-center justify-center"
-                        onClick={emptyCart}
-                      >
-                        Empty Cart
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <BsCartX className="text-[#EDEDED] text-[120px]" />
-                      <p className="font-medium text-sm mt-8">
-                        No products in the cart.
-                      </p>
-                      <Link
-                        to="/shop"
-                        className="uppercase bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl transition duration-250 ease-in-out text-white font-semibold p-3 rounded-md mt-8 flex items-center justify-center group"
-                        onClick={() => setIsCartOpen((prev) => !prev)}
-                      >
-                        <span className="text-[12px] leading-none">
-                          Return to shop
-                        </span>
-                        <LiaShoppingBagSolid className="text-[20px] font-bold ml-1 leading-none inline-block transition-transform group-hover:translate-x-1 duration-300 ease-in-out" />
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                </Link>
+              </div>
+            ) : (
+              ""
+            )}
           </motion.div>
-        </AnimatePresence>
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 
