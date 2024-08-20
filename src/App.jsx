@@ -16,7 +16,7 @@ import { CartProvider } from './components/CartContext';
 import "./App.css";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import Dashboard from "./components/AdminDashboard/Dashboard";
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 
 function App({ showModal }) {
   return (
@@ -63,7 +63,7 @@ function App({ showModal }) {
                 }
               />
             </Routes>
-            <ToastContainer />
+            {/* <ToastContainer /> */}
           </div>
         </RouteLoader>
       </CartProvider>

@@ -70,7 +70,7 @@ const AllProducts = () => {
         setProducts(response.data.data.data);
         setLoading(false);
       } catch (error) {
-        setError("Error fetching products. Please try again later.");
+        // setError("Error fetching products. Please try again later.");
       }
     };
 

@@ -51,6 +51,7 @@ const CreateNewProduct = ({ onSuccess }) => {
         onSuccess();
       }, 2100); 
     } catch (error) {
+      console.log(error)
       toast.error(error.response?.data?.message ||
         "Failed to create product. Please try again.", {
         autoClose: 2000,

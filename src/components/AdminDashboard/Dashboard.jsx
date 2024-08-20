@@ -4,6 +4,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import CreateNewProduct from "./CreateNewProduct";
+import DeleteProductModal from "./DeleteProductModal";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,18 +14,19 @@ const Dashboard = ({ adminName }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
   const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updateModalVisible, setUpdateModalVisible] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [imageCover, setImageCover] = useState("");
-  const [images, setImages] = useState("");
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingUserId, setDeletingUserId] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("userInitials");
     localStorage.removeItem("userName");
     localStorage.removeItem("token");
-    
+
     toast.success("Logout successful!", {
       autoClose: 2000,
     });
@@ -33,6 +35,56 @@ const Dashboard = ({ adminName }) => {
     setTimeout(() => {
       navigate("/login");
     }, 2000);
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          "https://api-agroconnect.onrender.com/api/v1/users/",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setUsers(response.data.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setLoading(false);
+      }
+    };
+
+    if (activeContent === "registered-users") {
+      fetchUsers();
+    }
+    console.log(activeContent);
+  }, [activeContent]);
+
+  const handleDeleteUser = async (userId) => {
+    setDeletingUserId(userId);
+    try {
+      setIsDeleting(true);
+      await axios.delete(
+        `https://api-agroconnect.onrender.com/api/v1/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setUsers(users.filter((user) => user._id !== userId));
+      toast.success("User deleted successfully!", {
+        autoClose: 2000,
+      });
+      setIsDeleting(false);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user.", {
+        autoClose: 2000,
+      });
+    }
   };
 
   useEffect(() => {
@@ -58,31 +110,15 @@ const Dashboard = ({ adminName }) => {
     setActiveContent("all-products");
   };
 
-  const handleUpdateClick = (product) => {
-    setSelectedProduct(product);
-    setImageCover(product.imageCover || "");
-    setImages(product.images || "");
-    setUpdateModalVisible(true);
+  const handleDeleteClick = (productId) => {
+    setSelectedProduct(productId);
+    setShowDeleteModal(true);
   };
 
-  const handleUpdateSubmit = async () => {
-    if (selectedProduct) {
-      try {
-        const formData = new FormData();
-        formData.append("imageCover", imageCover);
-        formData.append("images", images);
-
-        await axios.patch(
-          `https://api-agroconnect.onrender.com/api/v1/products/${selectedProduct._id}`,
-          formData
-        );
-
-        setUpdateModalVisible(false);
-        setActiveContent("all-products");
-      } catch (error) {
-        console.error("Error updating product:", error);
-      }
-    }
+  const handleDeleteSuccess = (deletedProductId) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product._id !== deletedProductId)
+    );
   };
 
   const renderContent = () => {
@@ -159,8 +195,11 @@ const Dashboard = ({ adminName }) => {
                             <td className="text-[9px] md:text-[15px] border">
                               GHS{product.price}
                             </td>
-                            <td className="text-center border">
-                              <button className="bg-red-500 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] w-14 lg:w-auto rounded-md">
+                            <td className="border flex items-center justify-center flex-wrap gap-2">
+                              <button
+                                className="bg-red-500 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] w-14 lg:w-auto rounded-md"
+                                onClick={() => handleDeleteClick(product._id)}
+                              >
                                 Delete
                               </button>
                               <button
@@ -176,9 +215,9 @@ const Dashboard = ({ adminName }) => {
                         <tr>
                           <td
                             colSpan="5"
-                            className="text-center text-[9px] md:text-[15px]"
+                            className="text-center text-[9px] md:text-[15px] border"
                           >
-                            No products available.
+                            No products found
                           </td>
                         </tr>
                       )}
@@ -190,14 +229,93 @@ const Dashboard = ({ adminName }) => {
           </>
         );
       case "registered-users":
-        return <div>Registered Users Content</div>;
+        return (
+          <div>
+            {loading ? (
+              <>
+                <div className="submit-loader2 mx-auto mt-10"></div>
+                <div className="text-center mt-10">Loading...</div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-center text-2xl font-medium mt-14">
+                  Registered Users
+                </h2>
+                <div className="overflow-x-auto my-10">
+                  <table
+                    border="1"
+                    cellPadding="10"
+                    cellSpacing="0"
+                    className="min-w-full table-fixed border-collapse border"
+                  >
+                    <thead>
+                      <tr>
+                        <th className="text-[10px] md:text-base text-center border py-2">
+                          Name
+                        </th>
+                        <th className="text-[10px] md:text-base text-center border py-2">
+                          Email
+                        </th>
+                        <th className="text-[10px] md:text-base text-center border py-2">
+                          Phone Number
+                        </th>
+                        {/* <th className="text-[10px] md:text-base text-center border py-2">
+                          Role
+                        </th> */}
+                        <th className="text-[10px] md:text-base text-center border py-2">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.length > 0 ? (
+                        users.map((user) => (
+                          <tr key={user._id}>
+                            <td className="text-[9px] md:text-[15px] border p-2">
+                              {user.name}
+                            </td>
+                            <td className="text-[9px] md:text-[15px] border p-2 max-w-xs truncate">
+                              {user.email}
+                            </td>
+                            <td className="text-[9px] md:text-[15px] border p-2">
+                              {user.phone}
+                            </td>
+                            {/* <td className="text-[9px] md:text-[15px] border p-2">
+                              {user.role}
+                            </td> */}
+                            <td className="text-center border p-2">
+                              <button
+                                className="bg-red-500 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] rounded-md"
+                                onClick={() => handleDeleteUser(user._id)}
+                              >
+                                {deletingUserId === user._id
+                                  ? "Deleting"
+                                  : "Delete"}
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5" className="text-center p-2">
+                            No users found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
+        );
       default:
-        return <div>Create a Product Content</div>;
+        return null;
     }
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-full md:h-svh">
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -267,19 +385,17 @@ const Dashboard = ({ adminName }) => {
                   activeContent === "registered-users" ? "bg-gray-300" : ""
                 }`}
               >
-                Registered users
+                Users
               </button>
             </li>
           </ul>
         </nav>
-        {/* <div className="absolute w-[70%] mx-auto bottom-[70px]"> */}
-          <button
-            onClick={handleLogout}
-            className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-red-500 text-white font-medium mt-60 rounded-md"
-          >
-            Logout
-          </button>
-        {/* </div> */}
+        <button
+          onClick={handleLogout}
+          className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-red-500 text-white font-medium mt-60 rounded-md"
+        >
+          Logout
+        </button>
       </div>
 
       <div className="flex-1 h-svh flex flex-col px-2 lg:px-10">
@@ -306,48 +422,13 @@ const Dashboard = ({ adminName }) => {
         </div>
       )}
 
-      {/* Update Product Modal */}
-      {updateModalVisible && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-          onClick={() => setUpdateModalVisible(false)}
-        >
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[60%] lg:w-[40%]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-lg font-medium mb-4">Update Product Images</h2>
-            <label className="block mb-2">Image Cover</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImageCover(e.target.files[0])}
-              className="border p-2 w-full mb-4"
-            />
-            <label className="block mb-2">Images</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImages(e.target.files)}
-              multiple
-              className="border p-2 w-full mb-4"
-            />
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={handleUpdateSubmit}
-                className="bg-[#2E982D] text-white py-2 px-4 rounded-md hover:bg-[#1e6a1e] transition"
-              >
-                Update
-              </button>
-              <button
-                onClick={() => setUpdateModalVisible(false)}
-                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-700 transition"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+      {showDeleteModal && (
+        <DeleteProductModal
+          show={showDeleteModal}
+          productId={selectedProduct}
+          onClose={() => setShowDeleteModal(false)}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
       )}
     </div>
   );
