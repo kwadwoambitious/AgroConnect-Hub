@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import NavBar from "./NavBar";
-import logo from "../assets/images/LOGO.png";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import Footer from "./Footer";
-import "../App.css";
-import { useCart } from "./CartContext";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const ProductModal = ({ product, onClose }) => {
   if (!product) return null;
@@ -21,7 +18,7 @@ const ProductModal = ({ product, onClose }) => {
           />
         </div>
         <div className="grid grid-cols-2 gap-4 mb-3">
-          {product.images.map((image, index) => (
+          {product.images?.map((image, index) => (
             <img
               key={index}
               loading="lazy"
@@ -33,21 +30,21 @@ const ProductModal = ({ product, onClose }) => {
         </div>
 
         <p className="text-gray-500">
-          <span className="font-medium text-[14px]">Description:</span>{" "}
+          <span className="font-medium text-[14px]">Description: </span>
           <span className="text-[13px]">{product.description}</span>
         </p>
         <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Brand:</span>{" "}
+          <span className="font-medium text-[14px]">Brand: </span>
           <span className="text-[13px]">{product.brand}</span>
         </p>
         <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Price:</span>{" "}
+          <span className="font-medium text-[14px]">Price: </span>
           <span className="text-[13px]">GHS {product.price}</span>
         </p>
         <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Reviews:</span>{" "}
+          <span className="font-medium text-[14px]">Reviews: </span>
           <span className="text-[13px]">
-            {product.ratingsAverage} ({product.ratingsQuantity})
+            {product.ratingsAverage} ({product.ratingsQuantity || 0})
           </span>
         </p>
       </div>
@@ -55,28 +52,38 @@ const ProductModal = ({ product, onClose }) => {
   );
 };
 
-const AllProducts = () => {
+const Top5CheapProducts = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loaded, setLoaded] = useState(Array(products.length).fill(false));
-  const { addToCart } = useCart(); // Use the addToCart function
+  const [loaded, setLoaded] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "https://api-agroconnect.onrender.com/api/v1/products"
-        );
-        setProducts(response.data.data.data);
+    // Fetch the top 5 cheap products from the API
+    axios
+      .get("https://api-agroconnect.onrender.com/api/v1/products/top-5-cheap")
+      .then((response) => {
+        const productsData = response.data.data.data; // Accessing the correct part of the response
+        setProducts(productsData);
+        setLoaded(new Array(productsData.length).fill(false));
         setLoading(false);
-      } catch (error) {
-        // Handle error
-      }
-    };
-
-    fetchProducts();
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      });
   }, []);
+
+  const handleImageLoad = (index) => {
+    setLoaded((prevLoaded) =>
+      prevLoaded.map((loaded, i) => (i === index ? true : loaded))
+    );
+  };
+
+  const addToCart = (product) => {
+    // Logic to add product to the cart
+    console.log("Adding to cart:", product);
+  };
 
   const handleViewDetails = (product) => {
     setSelectedProduct(product);
@@ -87,22 +94,20 @@ const AllProducts = () => {
   };
 
   return (
-    <>
-      <NavBar logoImage={logo} textColor="text-white" />
-      <div className="bg-[#f2f2f2c0] lg:gap-x-10 px-5 xl:px-20 py-20 lg:py-40 pt-[90px]">
-        <h2 className="text-[27px] sm:text-[40px] mt-12 lg:mt-0 mb-2 text-center text-[#111827] font-extrabold">
-          Explore Our Market
-        </h2>
-        <p className="font-normal md:text-lg text-center text-[#6B7280]">
-          Don't wait - get what you want today!
-        </p>
-
-        {loading ? (
-          <>
-            <div className="submit-loader2 mx-auto mt-10"></div>
-            <p className="text-center">Loading...</p>
-          </>
-        ) : products.length > 0 ? (
+    <div className="px-5 xl:px-20 py-28 bg-[#f2f2f2c0] border">
+      <h2 className="text-[27px] sm:text-[40px] mb-2 text-center text-[#111827] font-extrabold">
+        Top 5 Cheap Products
+      </h2>
+      <p className="font-normal md:text-lg text-center text-[#6B7280]">
+        Highly rated and affordably priced for your satisfaction.
+      </p>
+      {loading ? (
+        <>
+          <div className="submit-loader2 mx-auto mt-10"></div>
+          <p className="text-center">Loading...</p>
+        </>
+      ) : products.length > 0 ? (
+        <div>
           <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-0 md:gap-5 md:gap-y-12">
             {products.map((product, index) => (
               <div
@@ -118,6 +123,7 @@ const AllProducts = () => {
                     src={product.imageCover}
                     alt={product.name}
                     className="w-full h-36 object-cover transition duration-500 ease-in-out transform hover:scale-105"
+                    onLoad={() => handleImageLoad(index)}
                   />
                 </div>
                 <div className="px-4 py-4">
@@ -130,11 +136,11 @@ const AllProducts = () => {
                   </p>
                   <p className="text-gray-500 text-[12px] md:text-[14px]">
                     <span className="font-medium">Quantity:</span>{" "}
-                    {product.quantity}
+                    {product.quantity || "N/A"}
                   </p>
                   <p className="text-gray-500 text-[12px] md:text-[14px]">
                     <span className="font-medium">Ratings:</span>{" "}
-                    {product.ratingsAverage} ({product.ratingsQuantity})
+                    {product.ratingsAverage} ({product.ratingsQuantity || 0})
                   </p>
                   <button
                     className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-2 lg:p-[10px] mt-3 rounded font-medium"
@@ -152,20 +158,27 @@ const AllProducts = () => {
               </div>
             ))}
           </div>
-        ) : (
-          <p className="text-center text-xl mt-8 text-red-500">
-            No products match your search.
-          </p>
-        )}
-      </div>
-
-      <Footer />
+          <Link
+            to="/shop"
+            className="mt-8 font-semibold text-sm md:text-[15px] bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl transition duration-300 ease-in-out text-white py-[10px] rounded-md group w-[165px] md:w-[180px] mx-auto block text-center"
+          >
+            View all Products
+            <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+              <MdOutlineKeyboardDoubleArrowRight className="inline-block text-xl md:text-2xl font-bold" />
+            </span>
+          </Link>
+        </div>
+      ) : (
+        <p className="text-center text-xl mt-8 text-red-500">
+          No products match your search.
+        </p>
+      )}
 
       {selectedProduct && (
         <ProductModal product={selectedProduct} onClose={handleCloseModal} />
       )}
-    </>
+    </div>
   );
 };
 
-export default AllProducts;
+export default Top5CheapProducts;

@@ -7,10 +7,10 @@ import clientImage from "../assets/images/client-1.webp";
 import clientImage2 from "../assets/images/client-2.webp";
 import { BiSolidQuoteLeft, BiSolidQuoteRight } from "react-icons/bi";
 import FAQSection from "./FAQSection";
-import FeaturedProducts from "./FeaturedProducts";
 import logo from "../assets/images/LOGO.png";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { BiLogInCircle } from "react-icons/bi";
+import Top5CheapProducts from "./Top5CheapProducts";
 
 const LandingPage = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -77,7 +77,7 @@ const LandingPage = () => {
       {/* container for the navbar and the hero section ends here */}
 
       {/* featured product lists */}
-      <FeaturedProducts />
+      <Top5CheapProducts />
       {/* featured product lists ends here */}
 
       {/* login banner */}
