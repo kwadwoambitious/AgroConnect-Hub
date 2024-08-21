@@ -3,6 +3,7 @@ import axios from "axios";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useCart } from "./CartContext";
 
 const ProductModal = ({ product, onClose }) => {
   if (!product) return null;
@@ -57,6 +58,7 @@ const Top5CheapProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState([]);
+  const { addToCart } = useCart(); // Use the addToCart function
 
   useEffect(() => {
     // Fetch the top 5 cheap products from the API
@@ -78,11 +80,6 @@ const Top5CheapProducts = () => {
     setLoaded((prevLoaded) =>
       prevLoaded.map((loaded, i) => (i === index ? true : loaded))
     );
-  };
-
-  const addToCart = (product) => {
-    // Logic to add product to the cart
-    console.log("Adding to cart:", product);
   };
 
   const handleViewDetails = (product) => {
@@ -144,7 +141,7 @@ const Top5CheapProducts = () => {
                   </p>
                   <button
                     className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-2 lg:p-[10px] mt-3 rounded font-medium"
-                    onClick={() => addToCart(product)} // Add product to cart
+                    onClick={() => addToCart(product)}  // Add product to cart
                   >
                     Add to Cart
                   </button>
