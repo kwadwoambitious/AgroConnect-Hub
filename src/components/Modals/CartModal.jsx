@@ -24,7 +24,7 @@ const cartVariants = {
 };
 
 const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, updateCartItem } = useCart();
 
   // Calculate the total amount
   const calculateTotalAmount = () => {
@@ -56,14 +56,14 @@ const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
           variants={cartOverlayVariants}
         >
           <motion.div
-            className="fixed top-0 right-0 bottom-0 w-[300px] md:w-[350px] bg-white z-[99] border-l border-gray-200 shadow-lg overflow-y-scroll"
+            className="fixed top-0 right-0 bottom-0 w-full md:w-[350px] bg-white z-[99] border-l border-gray-200 shadow-lg overflow-y-scroll"
             variants={cartVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
           >
             <div className="flex justify-between items-center p-6 md:py-8 border-b">
-              <h2 className="text-xl md:text-2xl text-[#0F172A] font-semibold">
+              <h2 className="text-xl text-[#0F172A] font-semibold">
                 Shopping cart
               </h2>
               <button
@@ -78,9 +78,9 @@ const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
                 cart.map((product) => (
                   <div
                     key={product._id}
-                    className="flex items-center justify-between mb-4"
+                    className="flex items-center justify-between mb-4 border-b border-gray-300 pb-3"
                   >
-                    <div className="flex items-center gap-x-2 md:gap-x-5">
+                    <div className="flex items-center gap-x-6 md:gap-x-5">
                       <img
                         src={product.imageCover}
                         alt={product.name}
@@ -90,10 +90,25 @@ const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
                         <p className="font-semibold text-[13px] md:text-base text-gray-800">
                           {product.name}
                         </p>
-                        <p className="text-gray-500 text-[12px] md:text-[15px]">
+                        <div className="flex items-center gap-x-2 mt-2 mb-2">
+                          <button
+                            className="bg-gray-200 text-gray-600 px-2 rounded"
+                            onClick={() => updateCartItem(product._id, product.quantity - 1)}
+                          >
+                            -
+                          </button>
+                          <span className="text-[12px]">{product.quantity}</span>
+                          <button
+                            className="bg-gray-200 text-gray-600 px-2 rounded"
+                            onClick={() => updateCartItem(product._id, product.quantity + 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <p className="text-gray-500 text-[12px] md:text-[13px]">
                           GHS {product.price} x {product.quantity}
                         </p>
-                        <p className="text-gray-800 font-semibold text-[13px] md:text-[15px]">
+                        <p className="text-gray-800 font-semibold text-[13px] md:text-[13px]">
                           Total: GHS {product.price * product.quantity}
                         </p>
                       </div>
@@ -126,23 +141,21 @@ const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
               )}
             </div>
             {cart.length > 0 ? (
-              <div className="py-4 px-6 border-t border-gray-300">
+              <div className="py-4 px-6">
                 <div className="flex justify-between mb-6">
                   <span className="font-semibold text-gray-800">Total Amount:</span>
                   <span className="font-semibold text-gray-800">{calculateTotalAmount()}</span>
                 </div>
                 <Link to="/checkout">
                   <button
-                    className="block w-full mx-auto bg-[#2E982D] hover:bg-[#1e6a1e] text-white py-2 rounded text-[14px] md:text-[15px]"
+                    className="block w-full mx-auto bg-[#2E982D] hover:bg-[#1e6a1e] text-white py-2 rounded text-center font-semibold mb-6"
                     onClick={() => setIsCartOpen(false)}
                   >
-                    Proceed to checkout
+                    Proceed to Checkout
                   </button>
                 </Link>
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
           </motion.div>
         </motion.div>
       )}

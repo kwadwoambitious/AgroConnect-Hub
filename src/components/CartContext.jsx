@@ -24,8 +24,7 @@ export const CartProvider = ({ children }) => {
         newCart[productIndex].quantity += 1;
         toast.success(`${product.name} quantity updated in cart!`, {
           autoClose: 2000,
-        }
-        );
+        });
         return newCart;
       }
       toast.success(`${product.name} added to cart!`, {
@@ -39,8 +38,26 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
   };
 
+  const updateCartItem = (productId, quantity) => {
+    setCart((prevCart) => {
+      const productIndex = prevCart.findIndex((item) => item._id === productId);
+      if (productIndex !== -1) {
+        const newCart = [...prevCart];
+        if (quantity > 0) {
+          newCart[productIndex].quantity = quantity;
+          toast.success(`Quantity updated to ${quantity}`, { autoClose: 2000 });
+        } else {
+          newCart.splice(productIndex, 1);
+          toast.success(`Product removed from cart`, { autoClose: 2000 });
+        }
+        return newCart;
+      }
+      return prevCart;
+    });
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateCartItem }}>
       {children}
       <ToastContainer />
     </CartContext.Provider>
