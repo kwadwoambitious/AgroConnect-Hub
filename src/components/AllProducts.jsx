@@ -57,6 +57,8 @@ const ProductModal = ({ product, onClose }) => {
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(Array(products.length).fill(false));
@@ -69,6 +71,7 @@ const AllProducts = () => {
           "https://api-agroconnect.onrender.com/api/v1/products"
         );
         setProducts(response.data.data.data);
+        setFilteredProducts(response.data.data.data); // Set initial filtered products
         setLoading(false);
       } catch (error) {
         // Handle error
@@ -77,6 +80,14 @@ const AllProducts = () => {
 
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    // Filter products based on search term
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
 
   const handleViewDetails = (product) => {
     setSelectedProduct(product);
@@ -89,7 +100,7 @@ const AllProducts = () => {
   return (
     <>
       <NavBar logoImage={logo} textColor="text-white" />
-      <div className="bg-[#f2f2f2c0] lg:gap-x-10 px-5 xl:px-20 py-20 lg:py-40 pt-[90px]">
+      <div className="bg-[#f2f2f2c0] lg:gap-x-10 px-5 xl:px-20 py-20 lg:py-40 mt-[100px] lg:mt-[90px]">
         <h2 className="text-[27px] sm:text-[40px] mt-12 lg:mt-0 mb-2 text-center text-[#111827] font-extrabold">
           Explore Our Market
         </h2>
@@ -97,14 +108,27 @@ const AllProducts = () => {
           Don't wait - get what you want today!
         </p>
 
+        {/* Search Bar */}
+        <div className="fixed top-[90px] left-0 right-0 bg-[#2E982D] p-7 lg:p-8 z-50">
+          <div className="flex justify-center">
+            <input
+              type="text"
+              className="border rounded-full w-full max-w-md p-2 px-4 focus:outline-none focus:ring-1 lg:focus:ring-2 focus:ring-black text-[14px] lg:text-[15px]"
+              placeholder="Search for a product..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
         {loading ? (
           <>
             <div className="submit-loader2 mx-auto mt-10"></div>
             <p className="text-center">Loading...</p>
           </>
-        ) : products.length > 0 ? (
+        ) : filteredProducts.length > 0 ? (
           <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-0 md:gap-5 md:gap-y-12">
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <div
                 key={product._id}
                 className="bg-white shadow-[0px_0px_19px_3px_rgba(0,0,0,0.1);] max-w-[250px] md:max-w-[250px] rounded-xl mx-auto w-full mb-[24px] relative"
@@ -153,7 +177,7 @@ const AllProducts = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-xl mt-8 text-red-500">
+          <p className="text-center lg:text-xl mt-8 text-red-500">
             No products match your search.
           </p>
         )}

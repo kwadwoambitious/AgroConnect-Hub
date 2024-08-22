@@ -71,7 +71,7 @@ const NavBar = ({ logoImage, textColor }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-[100%] px-5 lg:px-20 mx-auto flex items-center justify-between 2xl:px-24 z-50 fixed top-0 md:mt-0 bg-[#FFFFFF] shadow-[0px_19px_26px_-20px_rgba(0,0,0,0.1)] py-6 h-[90px]">
+      <div className="w-[100%] px-5 lg:px-20 mx-auto flex items-center justify-between 2xl:px-24 z-[80] fixed top-0 md:mt-0 bg-[#FFFFFF] shadow-[0px_19px_26px_-20px_rgba(0,0,0,0.1)] py-6 h-[90px]">
         <div className="flex items-center gap-x-2">
           {isOpen ? (
             <motion.div
