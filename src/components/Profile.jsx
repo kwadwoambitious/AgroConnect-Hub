@@ -4,9 +4,10 @@ import Footer from "./Footer";
 import logo from "../assets/images/LOGO.png";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
 import { RxUpdate } from "react-icons/rx";
-import axios from "axios"; // Ensure you have axios installed
-import { ToastContainer, toast } from "react-toastify";
+// import axios from "axios"; // Ensure you have axios installed
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { handleUpdate } from "./Auth/handleUpdate";
 
 const Profile = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -62,56 +63,20 @@ const Profile = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-    // Get the token from localStorage or context
-    const token = localStorage.getItem("token");
+  const onSubmit = async (event) => {
+    const success = await handleUpdate(
+      event,
+      currentPassword,
+      newPassword,
+      confirmPassword,
+      setLoading
+    );
 
-    if(!currentPassword || !newPassword || !confirmPassword){
-      toast.error("All fields are required!", {
-        autoClose: 2000,
-      });
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await axios.patch(
-        "https://api-agroconnect.onrender.com/api/v1/users/updateMyPassword",
-        {
-          passwordCurrent: currentPassword,
-          password: newPassword,
-          passwordConfirm: confirmPassword,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("Password updated successfully!", {
-          autoClose: 2000,
-        });
-
-        // Clear the password fields
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-      } else {
-        toast.error("Failed to update password. Please try again.", {
-          autoClose: 2000,
-        });
-      }
-    } catch (error) {
-      console.error("Error updating password:", error);
-      toast.error("An error occurred while updating your password.", {
-        autoClose: 2000,
-      });
-    } finally {
-      setLoading(false);
+    if (success) {
+      // Clear input fields on successful update
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
     }
   };
 
@@ -153,7 +118,7 @@ const Profile = () => {
             <h2 className="text-xl lg:text-2xl mb-7 font-bold text-[#111827]">
               Update Password
             </h2>
-            <form onSubmit={handleUpdate} noValidate>
+            <form onSubmit={onSubmit} noValidate>
               <label>
                 <div
                   className={`flex items-center rounded px-3 w-full ${
@@ -163,7 +128,7 @@ const Profile = () => {
                   } mb-5`}
                 >
                   <input
-                   type={showCurrentPassword ? "text" : "password"}
+                    type={showCurrentPassword ? "text" : "password"}
                     name="currentPassword"
                     placeholder="Current Password"
                     value={currentPassword}

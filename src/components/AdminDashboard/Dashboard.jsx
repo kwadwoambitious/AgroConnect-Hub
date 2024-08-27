@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { MdOutlineClose } from "react-icons/md";
-import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import CreateNewProduct from "./CreateNewProduct";
 import DeleteProductModal from "./DeleteProductModal";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddProductPage from "./AddProductPage";
 
 const Dashboard = ({ adminName }) => {
   const [activeContent, setActiveContent] = useState("create-product");
@@ -125,20 +125,9 @@ const Dashboard = ({ adminName }) => {
     switch (activeContent) {
       case "create-product":
         return (
-          <div className="h-svh flex items-center justify-center flex-col">
-            <h2 className="text-xl md:text-2xl mb-5 font-medium">
-              Click to add a product
-            </h2>
-            <button
-              className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white p-3 rounded-md group text-[14px]"
-              onClick={() => setCreateNewProductModal(!createNewProductModal)}
-            >
-              Add Product
-              <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-                <FaPlus className="inline-block md:text-xl font-bold ml-2" />
-              </span>
-            </button>
-          </div>
+          <AddProductPage 
+            onShow={() => setCreateNewProductModal(!createNewProductModal)}
+          />
         );
       case "all-products":
         return (
@@ -280,9 +269,9 @@ const Dashboard = ({ adminName }) => {
                             <td className="text-[9px] md:text-[15px] border p-2">
                               {user.phone}
                             </td>
-                            {/* <td className="text-[9px] md:text-[15px] border p-2">
+                            <td className="text-[9px] md:text-[15px] border p-2">
                               {user.role}
-                            </td> */}
+                            </td>
                             <td className="text-center border p-2">
                               <button
                                 className="bg-red-500 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] rounded-md"

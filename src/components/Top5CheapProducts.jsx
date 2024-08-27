@@ -40,7 +40,7 @@ const ProductModal = ({ product, onClose }) => {
         </p>
         <p className="text-gray-500 mt-1">
           <span className="font-medium text-[14px]">Price: </span>
-          <span className="text-[13px]">GHS {product.price}</span>
+          <span className="text-[13px]">₵ {product.price}</span>
         </p>
         <p className="text-gray-500 mt-1">
           <span className="font-medium text-[14px]">Reviews: </span>
@@ -128,7 +128,7 @@ const Top5CheapProducts = () => {
                     {product.name}
                   </h3>
                   <p className="text-gray-500 text-[12px] md:text-[14px]">
-                    <span className="font-medium">Price:</span> GHS{" "}
+                    <span className="font-medium">Price:</span> ₵{" "}
                     {product.price}
                   </p>
                   <p className="text-gray-500 text-[12px] md:text-[14px]">

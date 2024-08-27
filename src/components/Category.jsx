@@ -9,30 +9,53 @@ import Footer from "./Footer";
 const Category = () => {
   const { categoryName } = useParams();
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProductsByCategory = async () => {
+    // Fetch all products once
+    const fetchAllProducts = async () => {
       try {
         const response = await axios.get(
-          `https://api-agroconnect.onrender.com/api/v1/products?category=${categoryName}`
+          "https://api-agroconnect.onrender.com/api/v1/products",{
+        timeout: 10000, // Set timeout to 10 seconds (10000 ms)
+      }
         );
-        setProducts(response.data.data); // Adjust based on your actual JSON response structure
+        setProducts(response.data.data); // Store all products
         setLoading(false);
       } catch (error) {
+        console.error("Error fetching products:", error.message);
         setError("Error fetching products. Please try again later.");
         setLoading(false);
       }
     };
 
-    fetchProductsByCategory();
-  }, [categoryName]);
+    fetchAllProducts();
+  }, []);
 
-  if (loading) return <p className="text-center text-xl mt-8 text-gray-500">Loading products...</p>;
-  if (error) return <p className="text-center text-xl mt-8 text-red-500">{error}</p>;
+  useEffect(() => {
+    // Filter products by category
+    if (categoryName) {
+      const categoryProducts = products.filter((product) =>
+        product.categories.includes(categoryName)
+      );
+      setFilteredProducts(categoryProducts);
+    }
+  }, [categoryName, products]);
 
-  const productCount = products.length;
+  if (loading)
+    return (
+      <p className="text-center text-xl mt-8 text-gray-500">
+        Loading products...
+      </p>
+    );
+  if (error)
+    return (
+      <p className="text-center text-xl mt-8 text-red-500">{error}</p>
+    );
+
+  const productCount = filteredProducts.length;
 
   return (
     <>
@@ -44,10 +67,11 @@ const Category = () => {
       />
       <div className="lg:gap-x-10 px-5 xl:px-32 py-20 lg:py-40 pt-[90px]">
         <h1 className="mt-5 text-center text-[27px] sm:text-[40px] font-extrabold text-[#111827]">
-          {categoryName.toUpperCase().replace(/-/g, ' ').replace('AND', '&')} <span className="italic">PRODUCTS ({productCount})</span>
+          {categoryName.toUpperCase().replace(/-/g, ' ').replace('AND', '&')}{" "}
+          <span className="italic">PRODUCTS ({productCount})</span>
         </h1>
         <div className="mt-10 lg:mt-20 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-0 md:gap-5 md:gap-y-12">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product._id}
               className="bg-white shadow-[0px_0px_19px_3px_rgba(0,0,0,0.1);] max-w-[250px] md:max-w-[250px] rounded-[20px] md:rounded-xl mx-auto w-full mb-[24px] relative"
@@ -64,9 +88,7 @@ const Category = () => {
                   Category: {product.categories.join(", ")}
                 </p>
                 <p className="text-gray-500">Price: ${product.price}</p>
-                <p className="text-gray-500">
-                  Quantity: {product.quantity}
-                </p>
+                <p className="text-gray-500">Quantity: {product.quantity}</p>
                 <p className="text-gray-500">
                   Ratings: {product.ratingsAverage} ({product.ratingsQuantity})
                 </p>

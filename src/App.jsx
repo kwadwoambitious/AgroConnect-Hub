@@ -17,7 +17,7 @@ import "./App.css";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import Dashboard from "./components/AdminDashboard/Dashboard";
 import Checkout from "./components/Checkout";
-// import { ToastContainer } from 'react-toastify';
+import FarmerDashboard from "./components/FarmerDasboard/FarmerDashboard";
 
 function App({ showModal }) {
   return (
@@ -54,13 +54,18 @@ function App({ showModal }) {
               />
 
               <Route
-                path="/checkout"
+                path="/farmer-dashboard"
                 element={
                   <ProtectedRoute
-                    element={<Checkout />}
-                    
+                    element={<FarmerDashboard />}
+                    requiredRole="farmer"
                   />
                 }
+              />
+
+              <Route
+                path="/checkout"
+                element={<ProtectedRoute element={<Checkout />} />}
               />
 
               {/* Protect the /edit-profile route */}

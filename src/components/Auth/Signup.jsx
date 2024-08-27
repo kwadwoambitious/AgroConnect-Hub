@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,17 +22,25 @@ const Signup = () => {
     phone: "",
     password: "",
     passwordConfirm: "",
+    role: "user", // default value for role
   });
 
-  const [loading, setLoading] = useState(false); // New state for loading
-  const navigate = useNavigate(); // Hook for navigation
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
+    
+    // Log here for debugging (could also be inside handleSubmit for clarity)
+    // console.log("Updated formData in handleChange:", {
+    //   ...formData,
+    //   [name]: value,
+    // });
   };
 
   const handlePasswordFocus = () => setIsPasswordFocused(true);
@@ -50,6 +58,7 @@ const Signup = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     // Basic validation
     if (
       !formData.name ||
@@ -62,33 +71,29 @@ const Signup = () => {
         autoClose: 2000,
       });
       return;
-    }
-    else if(formData.name.length < 8){
+    } else if (formData.name.length < 8) {
       toast.error("Name must be at least 8 characters long!", {
-        autoClose: 2000, // Time in milliseconds
+        autoClose: 2000,
       });
       return;
     }
     // Validate email format
     else if (!emailRegex.test(formData.email)) {
       toast.error("Please enter a valid email address.", {
-        autoClose: 2000, // Time in milliseconds
+        autoClose: 2000,
       });
       return;
-    }
-    else if (!phoneRegex.test(formData.phone)) {
+    } else if (!phoneRegex.test(formData.phone)) {
       toast.error("Enter a 10-digit phone number starting with 0.", {
-        autoClose: 2000, // Time in milliseconds
+        autoClose: 2000,
       });
       return;
-    }
-    else if (formData.password.length < 8) {
+    } else if (formData.password.length < 8) {
       toast.error("Password must be at least 8 characters long.", {
         autoClose: 2000,
       });
       return;
-    }
-    else if (formData.password !== formData.passwordConfirm) {
+    } else if (formData.password !== formData.passwordConfirm) {
       toast.error("Passwords do not match.", {
         autoClose: 2000,
       });
@@ -96,31 +101,36 @@ const Signup = () => {
     }
 
     setLoading(true); // Start loading
+    console.log("Submitting formData:", formData);
 
     try {
       const response = await axios.post(
         "https://api-agroconnect.onrender.com/api/v1/users/signup",
-        formData,
+        formData, // formData now includes 'role'
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      
+
       toast.success("Signup successful!", {
         autoClose: 2000,
       });
       console.log("Signup successful:", response.data);
+      console.log("Form Data after submit:", formData);
 
       setTimeout(() => {
         navigate("/login");
       }, 2000);
     } catch (error) {
       console.error("Error during signup:", error.response?.data);
-      toast.error(error.response?.data?.message || "Signup failed. Please try again.", {
-        autoClose: 2000,
-      });
+      toast.error(
+        error.response?.data?.message || "Signup failed. Please try again.",
+        {
+          autoClose: 2000,
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -197,6 +207,19 @@ const Signup = () => {
               />
             </label>
 
+            {/* Role Selection */}
+            <label>
+              <select
+                name="role" // Ensure this matches your formData key
+                value={formData.role} // This ensures the select reflects the current state
+                onChange={handleChange} // Updates formData on change
+                className="block border-[1px] border-gray-600 transition duration-200 ease-in-out w-full py-[10px] px-2 focus:outline-none focus:border-[#2E982D] focus:border-[2px] focus:transition focus:duration-200 focus:ease-in-out mb-5 placeholder:md:text-[15px] placeholder:text-[12px] text-[12px] font-normal md:text-[15px] rounded"
+              >
+                <option value="user">User</option>
+                <option value="farmer">Farmer</option>
+              </select>
+            </label>
+
             <label>
               <div
                 className={`flex items-center rounded px-3 ${
@@ -212,7 +235,6 @@ const Signup = () => {
                   value={formData.password}
                   onChange={handleChange}
                   autoComplete="off"
-
                   onFocus={handlePasswordFocus}
                   onBlur={handlePasswordBlur}
                   className="block w-full py-[10px] focus:outline-none focus:border-black placeholder:md:text-[15px] placeholder:text-[12px] text-[12px] font-normal md:text-[15px] rounded"
@@ -246,7 +268,6 @@ const Signup = () => {
                   value={formData.passwordConfirm}
                   onChange={handleChange}
                   autoComplete="off"
-
                   onFocus={handleConfirmPasswordFocus}
                   onBlur={handleConfirmPasswordBlur}
                   className="block w-full py-[10px] focus:outline-none placeholder:md:text-[15px] placeholder:text-[12px] text-[12px] font-normal md:text-[15px] rounded"
@@ -275,19 +296,22 @@ const Signup = () => {
                 "Sign Up"
               )}
             </button>
-            <p className="mt-10 text-[12px] text-gray-600 md:text-[13px] text-center">
-              Already have an account?
+
+            <div className="flex justify-center mt-5 items-center">
+              <p className="text-gray-500 text-sm md:text-base">
+                Already have an account?
+              </p>
               <Link
                 to="/login"
-                className="text-[#0038eeef] hover:text-[#0038eec0] md:text-[14px] ml-1 font-semibold"
+                className="text-sm md:text-base text-[#2E982D] font-bold ml-1"
               >
-                Login
+                Log in
               </Link>
-            </p>
+            </div>
           </form>
-          <ToastContainer />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

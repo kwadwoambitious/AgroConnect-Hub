@@ -43,10 +43,10 @@ const MobileNavbar = ({ closeMobileNavbar }) => {
               {isCategory && (
                 <ul className='w-full font-normal text-black hidden group-hover:block transition-opacity duration-300 ease-in-out px-5'>
                   <li className='mt-4 text-[#2E982DD1] font-medium text-[13px] border-[#6B7280] border-b'>
-                    <Link to="/category/fruits" onClick={closeMobileNavbar}>Fruits</Link>
+                    <Link to="/category/fruit" onClick={closeMobileNavbar}>Fruit</Link>
                   </li>
                   <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
-                    <Link to="/category/vegetables" onClick={closeMobileNavbar}>Vegetables</Link>
+                    <Link to="/category/vegetable" onClick={closeMobileNavbar}>Vegetable</Link>
                   </li>
                   <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
                     <Link to="/category/grains-and-cereals" onClick={closeMobileNavbar}>Grains and Cereals</Link>

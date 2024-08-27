@@ -39,13 +39,21 @@ const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
     });
   };
 
+  // const handleProceedToCheckout = () => {
+  //   // Store the total amount in localStorage
+    
+  //   // Close the cart modal
+  //   setIsCartOpen(false);
+  // };
+
+  localStorage.setItem("totalAmount", calculateTotalAmount());
+
   return (
     <AnimatePresence>
       {isCartOpen && (
         <motion.div
           className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-md z-[90] h-full"
           onClick={(e) => {
-            // Close the modal when clicking on the overlay, not when clicking inside the modal
             if (e.target === e.currentTarget) {
               setIsCartOpen(false);
             }
@@ -149,7 +157,7 @@ const CartModal = ({ isCartOpen, setIsCartOpen, cartRef }) => {
                 <Link to="/checkout">
                   <button
                     className="block w-full mx-auto bg-[#2E982D] hover:bg-[#1e6a1e] text-white py-2 rounded text-center font-semibold mb-6"
-                    onClick={() => setIsCartOpen(false)}
+                    // onClick={handleProceedToCheckout}
                   >
                     Proceed to Checkout
                   </button>

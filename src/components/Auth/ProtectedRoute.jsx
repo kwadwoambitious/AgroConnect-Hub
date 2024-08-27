@@ -4,24 +4,23 @@ import { Navigate } from "react-router-dom";
 const ProtectedRoute = ({ element, requiredRole }) => {
   const isAuthenticated = localStorage.getItem("token");
   const userRole = localStorage.getItem("userRole");
-  
-  // Check if the route is /checkout
-  const isCheckoutRoute = window.location.pathname === "/checkout";
 
-  if (isCheckoutRoute) {
-    if (isAuthenticated && userRole === "user") {
+  // Check if the route is /farmer-dashboard
+  const isFarmerDashboardRoute = window.location.pathname === "/farmer-dashboard";
+
+  if (isFarmerDashboardRoute) {
+    // Allow access if the user is authenticated and has the farmer role
+    if (isAuthenticated && userRole === "farmer") {
       return element;
     }
-    // If not authenticated or role is not user, redirect to login
+
+    // Redirect to login if the user is not authenticated
     if (!isAuthenticated) {
-      // Store the intended route in session storage
-      sessionStorage.setItem("redirectAfterLogin", "/checkout");
       return <Navigate to="/login" replace />;
     }
-    // If authenticated but not a user, redirect to the admin dashboard
-    if (isAuthenticated && userRole === "admin") {
-      return <Navigate to="/admin-dashboard" replace />;
-    }
+
+    // Redirect to home page if the user is authenticated but does not have the farmer role
+    alert("Access denied. You do not have the necessary permissions.");
     return <Navigate to="/" replace />;
   }
 
