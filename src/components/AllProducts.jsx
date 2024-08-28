@@ -7,7 +7,53 @@ import Footer from "./Footer";
 import "../App.css";
 import { useCart } from "./CartContext";
 
-const ProductModal = ({ product, onClose }) => {
+export const ProductModal = ({ product, onClose }) => {
+  const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [distance, setDistance] = useState(null);
+
+  useEffect(() => {
+    const fetchAddressAndDistance = async () => {
+      if (product && product.productLocation && product.productLocation.coordinates) {
+        const [lng, lat] = product.productLocation.coordinates; // Correctly destructuring coordinates
+
+        try {
+          // Fetch address using OpenStreetMap Nominatim API
+          const addressResponse = await axios.get(
+            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+          );
+          setAddress(addressResponse.data.display_name || "Address not found");
+
+          // Fetch distance using the API
+          const userLocation = JSON.parse(localStorage.getItem("userLocation"));
+          if (userLocation) {
+            const { latitude, longitude } = userLocation;
+            const distanceResponse = await axios.get(
+              `https://api-agroconnect.onrender.com/api/v1/products/distances/${longitude},${latitude}/unit/km`
+            );
+
+            // Correctly accessing the distance data from the response
+            const productDistanceData = distanceResponse.data.data.data.find(
+              (item) => item._id === product._id
+            );
+
+            setDistance(
+              productDistanceData ? Math.round(productDistanceData.distance) : "Distance not available"
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching address or distance:", error);
+          setAddress("Error fetching address");
+          setDistance("Error fetching distance");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchAddressAndDistance();
+  }, [product]);
+
   if (!product) return null;
 
   return (
@@ -50,10 +96,24 @@ const ProductModal = ({ product, onClose }) => {
             {product.ratingsAverage} ({product.ratingsQuantity})
           </span>
         </p>
+        <p className="text-gray-500 mt-1">
+          <span className="font-medium text-[14px]">Location:</span>{" "}
+          <span className="text-[13px]">
+            {loading ? "Loading address..." : address}
+          </span>
+        </p>
+        <p className="text-gray-500 mt-1">
+          <span className="font-medium text-[14px]">Distance:</span>{" "}
+          <span className="text-[13px]">
+            {loading ? "Loading distance..." : distance ? `${distance} km` : "Distance not available"}
+          </span>
+        </p>
       </div>
     </div>
   );
 };
+
+
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -71,6 +131,7 @@ const AllProducts = () => {
           "https://api-agroconnect.onrender.com/api/v1/products"
         );
         setProducts(response.data.data.data);
+        console.log(response.data.data.data)
         setFilteredProducts(response.data.data.data); // Set initial filtered products
         setLoading(false);
       } catch (error) {
@@ -100,12 +161,12 @@ const AllProducts = () => {
   return (
     <>
       <NavBar logoImage={logo} textColor="text-white" />
-      <div className="bg-[#f2f2f2c0] lg:gap-x-10 px-5 xl:px-20 py-20 lg:py-40 mt-[100px] lg:mt-[90px]">
+      <div className="bg-[#f2f2f2c0] lg:gap-x-10 px-5 xl:px-20 pt-40 pb-24 lg:pt-44 lg:pb-24 mt-[80px] lg:mt-[90px]">
         <h2 className="text-[27px] sm:text-[40px] mt-12 lg:mt-0 mb-2 text-center text-[#111827] font-extrabold">
-          Explore Our Market
+        All Available Products
         </h2>
         <p className="font-normal md:text-lg text-center text-[#6B7280]">
-          Don't wait - get what you want today!
+        Find the Best Products to Meet Your Needs
         </p>
 
         {/* Search Bar */}

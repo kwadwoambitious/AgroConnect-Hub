@@ -55,12 +55,7 @@ function App({ showModal }) {
 
               <Route
                 path="/farmer-dashboard"
-                element={
-                  <ProtectedRoute
-                    element={<FarmerDashboard />}
-                    requiredRole="farmer"
-                  />
-                }
+                element={<ProtectedRoute element={<FarmerDashboard />} />}
               />
 
               <Route

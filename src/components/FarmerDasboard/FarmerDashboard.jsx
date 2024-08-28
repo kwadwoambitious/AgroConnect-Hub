@@ -13,7 +13,7 @@ import FarmerProducts from "./FarmerProducts";
 import DeleteProductModal from "../AdminDashboard/DeleteProductModal";
 
 function FarmerDashboard() {
-  const [activeContent, setActiveContent] = useState("products");
+  const [activeContent, setActiveContent] = useState("orders");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -42,7 +42,7 @@ function FarmerDashboard() {
 
   const handleProductCreationSuccess = () => {
     setCreateNewProductModal(false);
-    setActiveContent("add-product");
+    setActiveContent("products");
   };
 
 
@@ -105,10 +105,10 @@ function FarmerDashboard() {
 
   return (
     <div className="flex h-screen relative">
-      <p className="absolute right-4 top-4">
-        Welcome,{" "}
-        <span className="font-semibold text-[#2E982D] italic">
-          {farmerFirstName}
+      <p className="absolute right-4 top-4 font-semibold">
+        Welcome back,{" "}
+        <span className="font-semibold text-[#000000b0] italic">
+          ({farmerFirstName})
         </span>
       </p>
       <div className="lg:hidden fixed top-4 left-4 z-50">
@@ -180,7 +180,7 @@ function FarmerDashboard() {
                   activeContent === "products" ? "bg-gray-300" : ""
                 }`}
               >
-                Products
+                My Products
               </button>
             </li>
             <li className="mb-2">

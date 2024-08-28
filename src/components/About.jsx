@@ -11,6 +11,7 @@ import "../App.css";
 
 const About = () => {
   const [showValues, setShowValues] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const showMissions = () => {
     setShowValues(false);
@@ -18,6 +19,10 @@ const About = () => {
 
   const showValuesSection = () => {
     setShowValues(true);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
   };
 
   return (
@@ -31,12 +36,12 @@ const About = () => {
       />
       {/* navBar component ends here */}
 
-      <div className="relative hero-background-1 flex items-center justify-center gap-y-6 px-5 2xl:px-32 sm:py-10 -z-0 pb-20 lg:pb-40 lg:pt-20 pt-[90px]">
-        {/* Adjust mt-16 to the height of the fixed navbar */}
+      {/* <div className="relative hero-background-1 flex items-center justify-center gap-y-6 px-5 2xl:px-32 sm:py-10 -z-0 pb-20 lg:pb-40 lg:pt-20 pt-[90px]">
+
         <div className="bg-[#000000] h-full w-full absolute top-0 opacity-70 z-0"></div>
         <div className="text-center absolute inset-0 z-100 flex items-center justify-center flex-col">
           <h2 className="text-3xl md:text-5xl font-extrabold text-white">
-            {/* A Journey of Passion and Innovation */}
+            
             About Us
           </h2>
           <p className="lg:text-xl font-medium mt-3 text-white max-w-[900px] mx-auto">
@@ -44,15 +49,25 @@ const About = () => {
           </p>
           
         </div>
-      </div>
+      </div> */}
 
-      <div className="bg-[#F4F5FF] flex items-center justify-center lg:gap-x-10 px-5 xl:px-32 py-20 lg:py-40">
+      <div className="bg-[#F4F5FF] flex items-center justify-center lg:gap-x-10 px-5 xl:px-32 py-40 lg:py-40">
         <div>
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-xl z-[90]">
+              <span className="text-gray-500 font-medium">
+                Image Loading...
+              </span>
+            </div>
+          )}
           <img
             loading="lazy"
             src={aboutImage}
             alt="hero section image"
-            className="w-[583px] max-h-[500px] object-cover rounded-xl hidden lg:block"
+            className={`w-[583px] max-h-[500px] object-cover rounded-xl hidden lg:block ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={handleImageLoad}
           />
         </div>
         <div className="max-w-[700px] lg:max-w-[500px]">
@@ -158,7 +173,7 @@ const About = () => {
               <motion.div
                 key="values"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1}}
+                animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.05 }}
                 className="flex flex-wrap justify-center flex-col"

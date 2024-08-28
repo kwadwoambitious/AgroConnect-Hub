@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const totalAmount = localStorage.getItem("totalAmount");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -19,11 +19,11 @@ const Checkout = () => {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const orderItems = cart.map((item) => ({
     quantity: item.quantity, // Assuming the cart items have a quantity field
-    product: item._id  // Assuming the cart items have a productId field
+    product: item._id,  // Assuming the cart items have a productId field
+    farmer: item.farmer  // Assuming the cart items have a farmer field
   }));
 
-  console.log("The user id", userId)
-
+  console.log("The user id", userId);
 
   const handleOrder = async () => {
     try {
@@ -46,7 +46,7 @@ const Checkout = () => {
         console.log("Order created successfully:", data);
         alert("Order created successfully!");
         localStorage.removeItem('cart');
-        navigate("/shop")
+        navigate("/shop");
       } else {
         console.error("Error creating order:", data);
         alert(`Error creating order: ${data.message}`);
@@ -105,7 +105,7 @@ const Checkout = () => {
       </div>
 
       {/* Modal Overlay */}
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg max-w-96 w-[95%]">
             <div className="flex items-center justify-between mb-4">
@@ -156,14 +156,13 @@ const Checkout = () => {
               <button></button>
               <button
                 className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white py-2 px-4 rounded-lg font-semibold"
-                
               >
                 Make Order
               </button>
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

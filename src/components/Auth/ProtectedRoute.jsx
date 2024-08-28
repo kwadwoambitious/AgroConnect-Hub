@@ -5,44 +5,32 @@ const ProtectedRoute = ({ element, requiredRole }) => {
   const isAuthenticated = localStorage.getItem("token");
   const userRole = localStorage.getItem("userRole");
 
-  // Check if the route is /farmer-dashboard
+  // Check if the current path is /farmer-dashboard
   const isFarmerDashboardRoute = window.location.pathname === "/farmer-dashboard";
 
-  if (isFarmerDashboardRoute) {
-    // Allow access if the user is authenticated and has the farmer role
-    if (isAuthenticated && userRole === "farmer") {
+  if (!isAuthenticated) {
+    // Redirect to login if not authenticated
+    return <Navigate to="/login" replace />;
+  }
+
+  if (userRole === "farmer") {
+    // Allow access only to /farmer-dashboard for farmers
+    if (isFarmerDashboardRoute) {
       return element;
+    } else {
+      // Redirect farmers to /farmer-dashboard if trying to access other routes
+      return <Navigate to="/farmer-dashboard" replace />;
     }
+  }
 
-    // Redirect to login if the user is not authenticated
-    if (!isAuthenticated) {
-      return <Navigate to="/login" replace />;
-    }
-
-    // Redirect to home page if the user is authenticated but does not have the farmer role
+  // Allow access to routes based on requiredRole for other users
+  if (requiredRole && userRole !== requiredRole) {
     alert("Access denied. You do not have the necessary permissions.");
     return <Navigate to="/" replace />;
   }
 
-  // Handle role-based access control for other routes
-  if (isAuthenticated && (!requiredRole || userRole === requiredRole)) {
-    return element;
-  }
-
-  // Handle role-based access control for admin route
-  if (requiredRole === "admin" && isAuthenticated && userRole !== requiredRole) {
-    alert("Users can't access this page");
-    return <Navigate to="/" replace />;
-  }
-
-  // Handle case where the user is not authenticated
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Default case if the user does not have the required role
-  alert("Access denied. You do not have the necessary permissions.");
-  return <Navigate to="/" replace />;
+  // Allow access to the route for authenticated users with the correct role or no specific role required
+  return element;
 };
 
 export default ProtectedRoute;

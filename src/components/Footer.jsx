@@ -41,12 +41,12 @@ const Footer = () => {
                   Home
                 </NavLink>
               </li>
-              <li className="list-none text-white font-normal hover:underline text-sm md:text-[16px] mb-4 sm:mb-4">
+              {/* <li className="list-none text-white font-normal hover:underline text-sm md:text-[16px] mb-4 sm:mb-4">
                 <p>
                   <MdOutlineKeyboardDoubleArrowRight className="inline-block text-xl  font-bold" />
                   Categories
                 </p>
-              </li>
+              </li> */}
               <li className="list-none text-white font-normal hover:underline text-sm md:text-[16px] mb-4 sm:mb-4">
                 <NavLink to="/shop">
                   <MdOutlineKeyboardDoubleArrowRight className="inline-block text-xl  font-bold" />

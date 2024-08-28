@@ -7,20 +7,21 @@ const MobileNavbar = ({ closeMobileNavbar }) => {
   const [isCategory, setIsCategory] = useState(false);
 
   const variants = {
-    hidden: { opacity: 0, y: 10 }, 
-    visible: { opacity: 1, y: 0,transition: 0.5 },  
-    exit: { opacity: 0, y: -1, transition: 0.5 }     
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: 0.5 },
+    exit: { opacity: 0, y: -1, transition: 0.5 }
   };
 
   return (
     <div className='lg:hidden w-full bg-black bg-opacity-50 backdrop-blur-lg h-screen fixed z-[80] mt-[91px] flex justify-center overflow-auto'>
       <AnimatePresence>
         <motion.div
-          className='block lg:hidden bg-[#FFF] fixed z-[70] w-[100%] py-5 rounded-bl-xl rounded-br-xl px-6'
+          className='block lg:hidden bg-[#FFF] fixed z-[70] w-[100%] overflow-y-auto py-5 rounded-bl-xl rounded-br-xl px-6'
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={variants}
+          style={{ maxHeight: 'calc(100vh - 91px)' }} // Add a maximum height to the div to enable scrolling
         >
           <ul>
             <li className={`list-none mb-5 border-[#6B7280] border-b font-medium text-[13px] relative group`}>
@@ -41,7 +42,7 @@ const MobileNavbar = ({ closeMobileNavbar }) => {
                 <MdOutlineKeyboardArrowDown className={`inline text-xl transition-transform duration-300 ease-in-out ${isCategory ? '-rotate-180' : 'rotate-0'}`}/>
               </p>
               {isCategory && (
-                <ul className='w-full font-normal text-black hidden group-hover:block transition-opacity duration-300 ease-in-out px-5'>
+                <ul className='w-full font-normal text-black transition-opacity duration-300 ease-in-out px-5'>
                   <li className='mt-4 text-[#2E982DD1] font-medium text-[13px] border-[#6B7280] border-b'>
                     <Link to="/category/fruit" onClick={closeMobileNavbar}>Fruit</Link>
                   </li>
@@ -52,13 +53,22 @@ const MobileNavbar = ({ closeMobileNavbar }) => {
                     <Link to="/category/grains-and-cereals" onClick={closeMobileNavbar}>Grains and Cereals</Link>
                   </li>
                   <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
+                    <Link to="/category/dairy-products" onClick={closeMobileNavbar}>Dairy Products</Link>
+                  </li>
+                  <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
                     <Link to="/category/herbs-and-spices" onClick={closeMobileNavbar}>Herbs and Spices</Link>
                   </li>
                   <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
-                    <Link to="/category/legumes-and-pulses" onClick={closeMobileNavbar}>Legumes and Pulses</Link>
+                    <Link to="/category/nuts-and-seeds" onClick={closeMobileNavbar}>Nuts and Seeds</Link>
+                  </li>
+                  <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
+                    <Link to="/category/honey-and-sweetners" onClick={closeMobileNavbar}>Honey and Sweetners</Link>
+                  </li>
+                  <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px] border-[#6B7280] border-b'>
+                    <Link to="/category/organic-products" onClick={closeMobileNavbar}>Organic Products</Link>
                   </li>
                   <li className='mt-4 text-[#2E982DD1] py-2 font-medium text-[13px]'>
-                    <Link to="/category/nuts-and-seeds" onClick={closeMobileNavbar}>Nuts and Seeds</Link>
+                    <Link to="/category/poultry" onClick={closeMobileNavbar}>Poultry</Link>
                   </li>
                 </ul>
               )}

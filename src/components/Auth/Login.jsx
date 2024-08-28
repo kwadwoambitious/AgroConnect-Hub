@@ -31,6 +31,35 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const getLocationAndNavigate = async (userRole) => {
+    if (userRole === "user") {
+      navigate("/shop");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            localStorage.setItem("userLocation", JSON.stringify({
+              latitude,
+              longitude,
+            }));
+            console.log("User location stored:", { latitude, longitude });
+            // Navigate after storing location
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            // Navigate if location can't be retrieved
+            navigate("/shop");
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+        navigate("/shop");
+      }
+    } else {
+      navigate(userRole === "admin" ? "/admin-dashboard" : "/farmer-dashboard");
+    }
+  };
+
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     setLoading(true); // Start loading
@@ -78,18 +107,11 @@ const Login = () => {
       localStorage.setItem("userRole", user.role);
       localStorage.setItem("userId", userId);
 
-      const storedRole = localStorage.getItem("userRole");
-      console.log("Stored user role:", storedRole);
+      console.log("Stored user role:", user.role);
 
-      // Clear success message and navigate based on role after 2 seconds
+      // Clear success message and navigate based on role
       setTimeout(() => {
-        if (user.role === "admin") {
-          navigate("/admin-dashboard");
-        } else if (user.role === "farmer") {
-          navigate("/farmer-dashboard");
-        } else {
-          navigate("/shop");
-        }
+        getLocationAndNavigate(user.role);
       }, 2000);
     } catch (error) {
       console.error("Error during login:", error);
@@ -99,7 +121,6 @@ const Login = () => {
           autoClose: 2000,
         }
       );
-      console.error("Error during login:", error.response?.data);
     } finally {
       setLoading(false);
     }

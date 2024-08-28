@@ -19,8 +19,8 @@ const ContactUs = () => {
       />
       {/* navBar component ends here */}
 
-      <div className="relative hero-background-2 flex items-center justify-center gap-y-6 px-5 2xl:px-32 sm:py-10 -z-0 pb-20 lg:pb-40 lg:pt-20 pt-[90px]">
-        {/* Adjust mt-16 to the height of the fixed navbar */}
+      {/* <div className="relative hero-background-2 flex items-center justify-center gap-y-6 px-5 2xl:px-32 sm:py-10 -z-0 pb-20 lg:pb-40 lg:pt-20 pt-[90px]">
+        
         <div className="bg-[#000000] h-full w-full absolute top-0 opacity-70 z-0"></div>
         <div className="text-center absolute inset-0 z-100 flex items-center justify-center flex-col">
           <h2 className="text-3xl md:text-5xl font-extrabold text-white">
@@ -31,9 +31,9 @@ const ContactUs = () => {
             support.
           </p>
         </div>
-      </div>
+      </div> */}
 
-      <div className="bg-[#f2f2f2c0] w-full px-5 xl:px-32 py-20 lg:py-40">
+      <div className="bg-[#f2f2f2c0] w-full px-5 xl:px-32 py-40 lg:py-40">
         <h2 className="text-[27px] sm:text-[40px] mb-2 text-center text-[#111827] font-extrabold">
           Reach Out to Us
         </h2>
@@ -102,13 +102,13 @@ const ContactUs = () => {
                 info@agroconnecthub.com
               </p>
             </div>
-            <div className="mt-7">
+            {/* <div className="mt-7">
               <IoEarth className="text-white text-xl inline-block mr-2" />
               <p className="inline-block text-white font-medium text-sm">
                 <span className="font-extrabold">Website: </span>
                 www.agroconnecthub.com
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

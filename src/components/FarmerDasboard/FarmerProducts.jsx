@@ -11,7 +11,16 @@ const FarmerProducts = ({ activeContent }) => {
         const response = await axios.get(
           "https://api-agroconnect.onrender.com/api/v1/products"
         );
-        setProducts(response.data.data.data);
+        
+        // Get the userId from localStorage
+        const userId = localStorage.getItem("userId");
+
+        // Filter products based on the farmer property
+        const filteredProducts = response.data.data.data.filter(product =>
+          product.farmer === userId
+        );
+
+        setProducts(filteredProducts);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -47,7 +56,7 @@ const FarmerProducts = ({ activeContent }) => {
               cellSpacing="0"
               className="w-full border-collapse border"
             >
-              <thead className="">
+              <thead className="bg-gray-50">
                 <tr>
                   <th className="text-[10px] md:text-base text-center border">
                     Name

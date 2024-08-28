@@ -141,7 +141,7 @@ const Top5CheapProducts = () => {
                   </p>
                   <button
                     className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-2 lg:p-[10px] mt-3 rounded font-medium"
-                    onClick={() => addToCart(product)}  // Add product to cart
+                    onClick={() => addToCart(product)} // Add product to cart
                   >
                     Add to Cart
                   </button>
@@ -166,8 +166,8 @@ const Top5CheapProducts = () => {
           </Link>
         </div>
       ) : (
-        <p className="text-center text-xl mt-8 text-red-500">
-          No products match your search.
+        <p className="text-center text-lg lg:text-xl mt-8 text-red-500">
+          No products were found.
         </p>
       )}
 

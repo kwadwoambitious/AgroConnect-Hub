@@ -13,18 +13,17 @@ const CreateNewProduct = ({ onSuccess }) => {
     description: "",
     imageCover: "",
     images: "",
-    location: "",
+    longitude: "",
+    latitude: ""
   });
   const [loading, setLoading] = useState(false);
+
+  // Retrieve userId from localStorage
+  const userId = localStorage.getItem("userId");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
-
-    // Store brand in localStorage whenever it changes
-    if (name === "brand") {
-      localStorage.setItem("brand", value);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -33,10 +32,16 @@ const CreateNewProduct = ({ onSuccess }) => {
 
     const token = localStorage.getItem("token");
 
-    // Preparing images to be an array from comma-separated string
+    // Prepare images to be an array from comma-separated string
     const formattedProductData = {
       ...productData,
       images: productData.images.split(",").map((url) => url.trim()),
+      productLocation:
+        {
+          type: "Point",
+          coordinates: [parseFloat(productData.longitude), parseFloat(productData.latitude)],
+        },
+      farmer: userId, // Set the farmer field to userId
     };
 
     try {
@@ -49,6 +54,7 @@ const CreateNewProduct = ({ onSuccess }) => {
           },
         }
       );
+
       setProductData({
         name: "",
         brand: "",
@@ -58,7 +64,8 @@ const CreateNewProduct = ({ onSuccess }) => {
         description: "",
         imageCover: "",
         images: "",
-        location: "",
+        longitude: "",
+        latitude: ""
       });
 
       toast.success("Product created successfully!", {
@@ -91,7 +98,9 @@ const CreateNewProduct = ({ onSuccess }) => {
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Product Name</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Product Name
+          </label>
           <input
             type="text"
             name="name"
@@ -115,7 +124,9 @@ const CreateNewProduct = ({ onSuccess }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Quantity</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Quantity
+          </label>
           <input
             type="number"
             name="quantity"
@@ -127,7 +138,9 @@ const CreateNewProduct = ({ onSuccess }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Category</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Category
+          </label>
           <select
             name="categories"
             value={productData.categories}
@@ -149,7 +162,9 @@ const CreateNewProduct = ({ onSuccess }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Price (GHS)</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Price (GHS)
+          </label>
           <input
             type="number"
             name="price"
@@ -162,7 +177,9 @@ const CreateNewProduct = ({ onSuccess }) => {
 
         {/* Description input field */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Description</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Description
+          </label>
           <textarea
             name="description"
             value={productData.description}
@@ -175,7 +192,9 @@ const CreateNewProduct = ({ onSuccess }) => {
 
         {/* Image Cover input field */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Image Cover URL</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Image Cover URL
+          </label>
           <input
             type="text"
             name="imageCover"
@@ -188,7 +207,9 @@ const CreateNewProduct = ({ onSuccess }) => {
 
         {/* Images input field */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Images URLs (comma separated)</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">
+            Images URLs (comma separated)
+          </label>
           <input
             type="text"
             name="images"
@@ -199,16 +220,29 @@ const CreateNewProduct = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Location input field */}
+        {/* Longitude input field */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Location</label>
+          <label className="block text-gray-700 mb-2 text-[14px]">Longitude</label>
           <input
             type="text"
-            name="location"
-            value={productData.location}
+            name="longitude"
+            value={productData.longitude}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border rounded-md text-[14px]"
-            
+            required
+          />
+        </div>
+
+        {/* Latitude input field */}
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2 text-[14px]">Latitude</label>
+          <input
+            type="text"
+            name="latitude"
+            value={productData.latitude}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border rounded-md text-[14px]"
+            required
           />
         </div>
 
