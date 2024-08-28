@@ -6,18 +6,29 @@ import logo from "../assets/images/LOGO.png";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { useCart } from "./CartContext";
+import ProductDetailsModal from "./Modals/ProductDetailsModal";
 
 const Category = () => {
   const { categoryName } = useParams(); // Get the category from the URL
   const [products, setProducts] = useState([]); // Initialize as an empty array
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [error, setError] = useState(null); // State for handling errors
   const [loading, setLoading] = useState(true); // State for handling loading
   const [loaded, setLoaded] = useState(Array(products.length).fill(false));
+  const [searchTerm, setSearchTerm] = useState("");
   const { addToCart } = useCart();
 
+  useEffect(() => {
+    // Filter products based on search term
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
+
   const normalizeString = (str) =>
-    str.replace(/\s+/g, "").replace(/[^\w]/g, "").toLowerCase();
+    str.replace(/\s+/g, "").replace(/[^\w]/g, "").replace(/and/g, "").toLowerCase();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -42,9 +53,12 @@ const Category = () => {
     // Filter products by category if products data is available
     if (products && products.length > 0) {
       const normalizedCategoryName = normalizeString(categoryName);
+      console.log("category", normalizedCategoryName)
       const filtered = products.filter(
-        (product) =>
+        (product) =>(
           normalizeString(product.categories) === normalizedCategoryName
+        )
+        
       );
       setFilteredProducts(filtered);
     }
@@ -60,9 +74,9 @@ const Category = () => {
     setSelectedProduct(product);
   };
 
-  // const handleCloseModal = () => {
-  //   setSelectedProduct(null);
-  // };
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+  };
 
   return (
     <>
@@ -72,7 +86,21 @@ const Category = () => {
         textColor="text-white"
         iconColor="text-white"
       />
-      <div className="bg-[#F4F5FF] lg:gap-x-10 px-5 xl:px-32 pt-40 pb-24 lg:pt-32 lg:pb-24">
+
+      {/* Search Bar */}
+      <div className="fixed top-[90px] left-0 right-0 bg-[#2E982D] p-5 z-50">
+          <div className="flex justify-center">
+            <input
+              type="text"
+              className="border rounded-full w-full max-w-md p-2 px-4 focus:outline-none focus:ring-1 lg:focus:ring-2 focus:ring-black text-[14px] lg:text-[15px]"
+              placeholder="Search for a product..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+      <div className="bg-[#F4F5FF] lg:gap-x-10 px-5 xl:px-32 mt-20 pt-40 pb-24 lg:pt-32 lg:pb-24">
         <h1 className="text-[27px] sm:text-[40px] mb-2 text-center text-[#111827] font-extrabold">
           {formattedCategoryName}
         </h1>
@@ -142,6 +170,10 @@ const Category = () => {
       </div>
 
       <Footer />
+
+      {selectedProduct && (
+        <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
+      )}
     </>
   );
 };
