@@ -38,7 +38,7 @@ export const ProductModal = ({ product, onClose }) => {
             );
 
             setDistance(
-              productDistanceData ? Math.round(productDistanceData.distance) : "Distance not available"
+              productDistanceData ? productDistanceData.distance : "Distance not available"
             );
           }
         } catch (error) {
