@@ -24,6 +24,7 @@ const ProfileModal = ({ onClickLink }) => {
     localStorage.removeItem("userInitials");
     localStorage.removeItem("userName");
     localStorage.removeItem("token");
+    localStorage.removeItem("userLocation");
 
     toast.success("Logout successful!", {
       autoClose: 2000,

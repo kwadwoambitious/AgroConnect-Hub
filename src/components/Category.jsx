@@ -21,11 +21,11 @@ const Category = () => {
 
   useEffect(() => {
     // Filter products based on search term
-    const filtered = products.filter((product) =>
+    const filtered = filteredProducts.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
-  }, [searchTerm, products]);
+  }, [searchTerm, filteredProducts]);
 
   const normalizeString = (str) =>
     str.replace(/\s+/g, "").replace(/[^\w]/g, "").replace(/and/g, "").toLowerCase();

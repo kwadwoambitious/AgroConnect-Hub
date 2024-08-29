@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import DeleteProductModal from "../AdminDashboard/DeleteProductModal";
+import UpdateProductModal from "../AdminDashboard/UpdateProductModal";
+import { toast } from "react-toastify";
 
 const FarmerProducts = ({ activeContent }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [productData, setProductData] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -11,13 +19,13 @@ const FarmerProducts = ({ activeContent }) => {
         const response = await axios.get(
           "https://api-agroconnect.onrender.com/api/v1/products"
         );
-        
+
         // Get the userId from localStorage
         const userId = localStorage.getItem("userId");
 
         // Filter products based on the farmer property
-        const filteredProducts = response.data.data.data.filter(product =>
-          product.farmer === userId
+        const filteredProducts = response.data.data.data.filter(
+          (product) => product.farmer === userId
         );
 
         setProducts(filteredProducts);
@@ -35,6 +43,69 @@ const FarmerProducts = ({ activeContent }) => {
   const handleDeleteClick = (productId) => {
     setSelectedProduct(productId);
     setShowDeleteModal(true);
+  };
+
+  const handleDeleteSuccess = (deletedProductId) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product._id !== deletedProductId)
+    );
+  };
+
+  const handleUpdateClick = (product) => {
+    setProductData(product);
+    setShowUpdateModal(true);
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    setIsUpdating(true);
+
+    try {
+      // Perform API request to update product
+      const updatedProduct = await updateProduct(productData._id, productData);
+
+      if (updatedProduct) {
+        // Update the product in the state without refreshing
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
+            product._id === updatedProduct._id ? updatedProduct : product
+          )
+        );
+
+        // Close the modal
+        setShowUpdateModal(false);
+        setProductData({});
+        console.log("Product updated successfully");
+        toast.success("Product updated successfully", {
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to update product:", error);
+      alert("Failed to update product. Please try again.");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const updateProduct = async (productId, updatedData) => {
+    const token = localStorage.getItem("token"); // Assuming you store token in localStorage
+    try {
+      const response = await axios.patch(
+        `https://api-agroconnect.onrender.com/api/v1/products/${productId}`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data.data.data; // Ensure this returns the updated product data correctly
+    } catch (error) {
+      console.error("Error updating product:", error);
+      throw error;
+    }
   };
 
   return (
@@ -98,9 +169,8 @@ const FarmerProducts = ({ activeContent }) => {
                         >
                           Delete
                         </button>
-                        <button
-                          className="bg-[#2E982D] text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] w-14 lg:w-auto rounded-md"
-                          
+                        <button className="bg-[#2E982D] text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] w-14 lg:w-auto rounded-md" 
+                          onClick={() => handleUpdateClick(product)}
                         >
                           Update
                         </button>
@@ -121,6 +191,26 @@ const FarmerProducts = ({ activeContent }) => {
             </table>
           </div>
         </>
+      )}
+
+      {showDeleteModal && (
+        <DeleteProductModal
+          show={showDeleteModal}
+          productId={selectedProduct}
+          onClose={() => setShowDeleteModal(false)}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
+      )}
+
+      {/* Update Modal */}
+      {showUpdateModal && (
+        <UpdateProductModal
+          productData={productData}
+          setProductData={setProductData}
+          handleSubmit={handleUpdateSubmit}
+          setShowUpdateModal={setShowUpdateModal}
+          loading={isUpdating}
+        />
       )}
     </>
   );

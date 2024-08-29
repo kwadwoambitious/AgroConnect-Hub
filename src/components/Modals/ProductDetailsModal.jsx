@@ -9,17 +9,19 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
   useEffect(() => {
     const fetchAddressAndDistance = async () => {
-      if (product && product.productLocation && product.productLocation.coordinates) {
-        const [lng, lat] = product.productLocation.coordinates; // Correctly destructuring coordinates
+      if (
+        product &&
+        product.productLocation &&
+        product.productLocation.coordinates
+      ) {
+        const [lng, lat] = product.productLocation.coordinates;
 
         try {
-          // Fetch address using OpenStreetMap Nominatim API
           const addressResponse = await axios.get(
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
           );
           setAddress(addressResponse.data.display_name || "Address not found");
 
-          // Fetch distance using the API
           const userLocation = JSON.parse(localStorage.getItem("userLocation"));
           if (userLocation) {
             const { latitude, longitude } = userLocation;
@@ -27,13 +29,14 @@ const ProductDetailsModal = ({ product, onClose }) => {
               `https://api-agroconnect.onrender.com/api/v1/products/distances/${longitude},${latitude}/unit/km`
             );
 
-            // Correctly accessing the distance data from the response
             const productDistanceData = distanceResponse.data.data.data.find(
               (item) => item._id === product._id
             );
 
             setDistance(
-              productDistanceData ? productDistanceData.distance : "Distance not available"
+              productDistanceData
+                ? productDistanceData.distance
+                : "Distance not available"
             );
           }
         } catch (error) {
@@ -53,56 +56,64 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black backdrop-blur-md bg-opacity-50 flex items-center justify-center z-[90]">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-[30%]">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold inline-block">{product.name}</h3>
-          <IoCloseCircleOutline
-            className="cursor-pointer text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out"
-            onClick={onClose}
+      <div className="bg-white p-8 rounded-md shadow-lg w-full max-w-[95%] max-h-[95%] flex flex-col md:flex-row overflow-y-auto relative hide-scrollbar">
+        <IoCloseCircleOutline
+          className="absolute right-3 top-3 cursor-pointer text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out"
+          onClick={onClose}
+        />
+        <div className="flex-1 flex flex-col md:w-1/2">
+          <img
+            src={product.imageCover}
+            alt={product.name}
+            className="h-[80%] w-full object-cover mt-4 lg:mt-0 mb-2 border rounded-md"
           />
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 justify-center">
+            {product.images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`${product.name} - ${index + 1}`}
+                className="h-32 w-full object-cover border rounded-md"
+              />
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 mb-3">
-          {product.images.map((image, index) => (
-            <img
-              key={index}
-              loading="lazy"
-              src={image}
-              alt={`${product.name} - ${index + 1}`}
-              className="h-36 w-full object-cover transition duration-500 ease-in-out transform border rounded-md"
-            />
-          ))}
-        </div>
-
-        <p className="text-gray-500">
-          <span className="font-medium text-[14px]">Description:</span>{" "}
-          <span className="text-[13px]">{product.description}</span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Brand:</span>{" "}
-          <span className="text-[13px]">{product.brand}</span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Price:</span>{" "}
-          <span className="text-[13px]">₵{product.price}</span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Reviews:</span>{" "}
-          <span className="text-[13px]">
-            {product.ratingsAverage} ({product.ratingsQuantity})
-          </span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Location:</span>{" "}
-          <span className="text-[13px]">
+        <div className="flex-1 py-8 lg:p-8 md:w-1/2">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl lg:text-3xl text-[#111827] font-semibold">
+              {product.name}
+            </h3>
+          </div>
+          <p className="text-gray-500 mt-1 text-lg lg:text-2xl mb-6">
+            <span className="font-medium">Price:</span> GHS{product.price}
+          </p>
+          <p className="text-gray-500 mb-6">
+            <span className="font-medium">Description:</span>{" "}
+            {product.description}
+          </p>
+          <p className="text-gray-500 mt-1 mb-6">
+            <span className="font-medium">Seller:</span> {product.brand}
+          </p>
+          <p className="text-gray-500 mt-1 mb-6">
+            <span className="font-medium">Quantity:</span> {product.quantity} left in stock
+          </p>
+          <p className="text-gray-500 mt-1 mb-6">
+            <span className="font-medium">Reviews:</span>{" "}
+            <span>Avg.({product.ratingsAverage})</span> <span>Qty.({product.ratingsQuantity})</span>
+          </p>
+          <p className="text-gray-500 mt-1 mb-6">
+            <span className="font-medium">Location:</span>{" "}
             {loading ? "Loading address..." : address}
-          </span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Distance:</span>{" "}
-          <span className="text-[13px]">
-            {loading ? "Loading distance..." : distance ? `${distance} km` : "Distance not available"}
-          </span>
-        </p>
+          </p>
+          <p className="text-gray-500 mt-1">
+            <span className="font-medium">Distance:</span>{" "}
+            {loading
+              ? "Loading distance..."
+              : distance
+              ? `${distance} km`
+              : "Distance unavailable. Please log in to view it."}
+          </p>
+        </div>
       </div>
     </div>
   );

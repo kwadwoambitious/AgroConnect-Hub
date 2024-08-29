@@ -10,13 +10,11 @@ import DashboardChart from "./DashboardChart";
 import AddProductPage from "../AdminDashboard/AddProductPage";
 import CreateNewProduct from "../AdminDashboard/CreateNewProduct";
 import FarmerProducts from "./FarmerProducts";
-import DeleteProductModal from "../AdminDashboard/DeleteProductModal";
 
 function FarmerDashboard() {
-  const [activeContent, setActiveContent] = useState("orders");
+  const [activeContent, setActiveContent] = useState("products");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -29,6 +27,7 @@ function FarmerDashboard() {
     localStorage.removeItem("userName");
     localStorage.removeItem("firstName");
     localStorage.removeItem("token");
+    localStorage.removeItem("userLocation");
 
     toast.success("Logout successful!", {
       autoClose: 2000,
@@ -45,44 +44,11 @@ function FarmerDashboard() {
     setActiveContent("products");
   };
 
-
-  const handleDeleteSuccess = (deletedProductId) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product._id !== deletedProductId)
-    );
-  };
-
   const renderContent = () => {
     switch (activeContent) {
       case "dashboard":
         return (
           <div className="px-8 overflow-y-auto min-h-screen">
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-gray-100 p-4 rounded shadow flex-1">
-                <h3 className="text-lg font-semibold">Number of Products</h3>
-                <p className="text-2xl" id="num-products">
-                  0
-                </p>
-              </div>
-              <div className="bg-gray-100 p-4 rounded shadow flex-1">
-                <h3 className="text-lg font-semibold">Orders Completed</h3>
-                <p className="text-2xl" id="orders-completed">
-                  0
-                </p>
-              </div>
-              <div className="bg-gray-100 p-4 rounded shadow flex-1">
-                <h3 className="text-lg font-semibold">Pending Orders</h3>
-                <p className="text-2xl" id="pending-orders">
-                  0
-                </p>
-              </div>
-              <div className="bg-gray-100 p-4 rounded shadow flex-1">
-                <h3 className="text-lg font-semibold">Revenue</h3>
-                <p className="text-2xl" id="revenue">
-                  $0.00
-                </p>
-              </div>
-            </div> */}
             <DashboardChart />
           </div>
         );
@@ -236,15 +202,6 @@ function FarmerDashboard() {
         >
           <CreateNewProduct onSuccess={handleProductCreationSuccess} />
         </div>
-      )}
-
-      {showDeleteModal && (
-        <DeleteProductModal
-          show={showDeleteModal}
-          productId={selectedProduct}
-          onClose={() => setShowDeleteModal(false)}
-          onDeleteSuccess={handleDeleteSuccess}
-        />
       )}
     </div>
   );

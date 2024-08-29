@@ -1,57 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useCart } from "./CartContext";
-
-const ProductModal = ({ product, onClose }) => {
-  if (!product) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black backdrop-blur-md bg-opacity-50 flex items-center justify-center z-[90]">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-[30%]">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold inline-block">{product.name}</h3>
-          <IoCloseCircleOutline
-            className="cursor-pointer text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out"
-            onClick={onClose}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4 mb-3">
-          {product.images?.map((image, index) => (
-            <img
-              key={index}
-              loading="lazy"
-              src={image}
-              alt={`${product.name} - ${index + 1}`}
-              className="h-36 w-full object-cover transition duration-500 ease-in-out transform border rounded-md"
-            />
-          ))}
-        </div>
-
-        <p className="text-gray-500">
-          <span className="font-medium text-[14px]">Description: </span>
-          <span className="text-[13px]">{product.description}</span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Brand: </span>
-          <span className="text-[13px]">{product.brand}</span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Price: </span>
-          <span className="text-[13px]">₵ {product.price}</span>
-        </p>
-        <p className="text-gray-500 mt-1">
-          <span className="font-medium text-[14px]">Reviews: </span>
-          <span className="text-[13px]">
-            {product.ratingsAverage} ({product.ratingsQuantity || 0})
-          </span>
-        </p>
-      </div>
-    </div>
-  );
-};
+import ProductDetailsModal from "./Modals/ProductDetailsModal";
 
 const Top5CheapProducts = () => {
   const [products, setProducts] = useState([]);
@@ -172,7 +124,7 @@ const Top5CheapProducts = () => {
       )}
 
       {selectedProduct && (
-        <ProductModal product={selectedProduct} onClose={handleCloseModal} />
+        <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
       )}
     </div>
   );
