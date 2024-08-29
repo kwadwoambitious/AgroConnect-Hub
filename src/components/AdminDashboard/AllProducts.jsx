@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import UpdateProductModal from "./UpdateProductModal";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 // Main Component
 const AllProducts = ({
@@ -6,6 +9,7 @@ const AllProducts = ({
   loading,
   setSelectedProduct,
   setShowDeleteModal,
+  setProducts
 }) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productData, setProductData] = useState({});
@@ -27,16 +31,26 @@ const AllProducts = ({
 
     try {
       // Perform API request to update product
-      await updateProduct(productData._id, productData);
+      const updatedProduct = await updateProduct(productData._id, productData);
 
-      // On success, close the modal and refresh the product list
-      setShowUpdateModal(false);
-      setProductData({});
-      // Refresh the product list or update the state as needed
-      console.log("Product updated successfully");
+      if (updatedProduct) {
+        // Update the product in the state without refreshing
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
+            product._id === updatedProduct._id ? updatedProduct : product
+          )
+        );
+
+        // Close the modal
+        setShowUpdateModal(false);
+        setProductData({});
+        console.log("Product updated successfully");
+        toast.success("Product updated successfully", {
+          autoClose: 2000,
+        });
+      }
     } catch (error) {
       console.error("Failed to update product:", error);
-      // Handle error (show a notification, etc.)
       alert("Failed to update product. Please try again.");
     } finally {
       setIsUpdating(false);
@@ -56,8 +70,9 @@ const AllProducts = ({
           },
         }
       );
-      return response.data;
+      return response.data.data.data; // Ensure this returns the updated product data correctly
     } catch (error) {
+      console.error("Error updating product:", error);
       throw error;
     }
   };
@@ -65,10 +80,10 @@ const AllProducts = ({
   return (
     <div>
       {loading ? (
-        <>
+        <div className="h-screen flex items-center justify-center flex-col">
           <div className="submit-loader2 mx-auto mt-10"></div>
-          <p className="text-center">Loading...</p>
-        </>
+          <p className="text-center mt-2 font-semibold">Loading Products...</p>
+        </div>
       ) : (
         <>
           <h2 className="text-center text-2xl font-medium mt-24">

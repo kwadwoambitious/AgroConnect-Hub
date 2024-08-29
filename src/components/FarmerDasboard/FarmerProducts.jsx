@@ -111,10 +111,10 @@ const FarmerProducts = ({ activeContent }) => {
   return (
     <>
       {loading ? (
-        <>
+        <div className="h-screen flex items-center justify-center flex-col">
           <div className="submit-loader2 mx-auto mt-10"></div>
-          <p className="text-center">Loading...</p>
-        </>
+          <p className="text-center mt-2 font-semibold">Loading Products...</p>
+        </div>
       ) : (
         <>
           <h2 className="text-center text-2xl font-medium mt-24">

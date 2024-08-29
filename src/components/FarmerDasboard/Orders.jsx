@@ -105,10 +105,10 @@ const Orders = () => {
       {error ? (
         <p className="mb-5 text-lg text-red-500">Error: {error}</p>
       ) : isLoading ? (
-        <>
+        <div className="h-screen flex items-center justify-center flex-col">
           <div className="submit-loader2 mx-auto mt-10"></div>
-          <p className="text-center">Loading...</p>
-        </>
+          <p className="text-center mt-2 font-semibold">Loading Orders...</p>
+        </div>
       ) : (
         <>
           <p className="mb-5 text-lg text-center">Total Orders: {totalOrders}</p>

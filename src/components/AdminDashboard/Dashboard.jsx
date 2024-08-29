@@ -44,6 +44,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    setLoading(true)
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
@@ -109,7 +110,7 @@ const Dashboard = () => {
       case "all-products":
         return (
           <>
-            <AllProducts loading={loading} products={products} setShowDeleteModal={setShowDeleteModal} setSelectedProduct={setSelectedProduct} />
+            <AllProducts loading={loading} products={products} setShowDeleteModal={setShowDeleteModal} setSelectedProduct={setSelectedProduct} setProducts={setProducts} />
           </>
         );
       case "registered-users":
