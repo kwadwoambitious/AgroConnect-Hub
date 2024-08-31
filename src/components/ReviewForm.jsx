@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import 'react-toastify/dist/ReactToastify.css';
 
 function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState(0); // Initialize rating with 0
+  const [hoverRating, setHoverRating] = useState(0); // State for hover effect
   const [review, setReview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,7 +31,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `https://api-agroconnect.onrender.com/api/v1/products/${productId}/reviews`,
         {
           rating,
@@ -44,14 +46,20 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
       toast.success("Review submitted successfully!", {
         autoClose: 2000,
       });
-      setRating("");
+      setRating(0);
       setReview("");
       setIsModalOpen(false);
     } catch (error) {
       toast.error("Error submitting review. Please try again.", {
         autoClose: 2000,
       });
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleClick = (index) => {
+    setRating(index);
   };
 
   if (!isOpen) return null;
@@ -69,7 +77,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
           />
         </button>
         {!token ? (
-          "Login first to review this product!"
+          <p className="text-center text-red-500">Login first to review this product!</p>
         ) : (
           <>
             <h2 className="text-xl lg:text-2xl font-semibold mb-4 text-center">
@@ -80,20 +88,26 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
                 <label className="block text-sm font-medium text-gray-700">
                   Rating
                 </label>
-                <select
-                  value={rating}
-                  onChange={(e) => setRating(e.target.value)}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
-                >
-                  <option value="" disabled>
-                    Select a rating
-                  </option>
-                  <option value="1">1 - Poor</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="3">3 - Good</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="5">5 - Excellent</option>
-                </select>
+                <div className="star-rating flex justify-start">
+                  {[...Array(5)].map((_, index) => (
+                    <label key={index} onMouseEnter={() => setHoverRating(index + 1)} onMouseLeave={() => setHoverRating(0)}>
+                      <input
+                        type="radio"
+                        name="rating"
+                        value={index + 1}
+                        onClick={() => handleClick(index + 1)}
+                        className="hidden"
+                      />
+                      <span
+                        className={`star text-3xl cursor-pointer transition duration-200 ${
+                          (hoverRating || rating) > index ? "text-[#ffc107]" : "text-gray-300"
+                        }`}
+                      >
+                        ★
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -111,6 +125,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
                 <button
                   type="submit"
                   className="w-full py-2 px-4 bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 text-white font-semibold rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-[15px] lg:text-base mt-2"
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Review"}
                 </button>

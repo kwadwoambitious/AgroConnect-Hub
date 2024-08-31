@@ -22,6 +22,27 @@ body{
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.star {
+  font-size: 2rem;
+  color: #d3d3d3; /* default star color */
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.star.filled {
+  color: #ffc107; /* filled star color */
+}
+
+.hidden {
+  display: none;
+}
+
 
 @tailwind base;
 @tailwind components;
