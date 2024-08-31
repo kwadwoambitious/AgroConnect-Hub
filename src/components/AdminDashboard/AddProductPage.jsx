@@ -8,7 +8,7 @@ const AddProductPage = ({ onShow }) => {
         Click to add a product
       </h2>
       <button
-        className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white p-3 rounded-md group text-[14px]"
+        className="bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 ease-in-out text-white p-3 rounded-md group text-[14px]"
         onClick={onShow}
       >
         Add Product

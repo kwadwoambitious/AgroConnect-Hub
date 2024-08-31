@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { MdOutlineClose } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import CreateNewProduct from "./CreateNewProduct";
 import DeleteProductModal from "./DeleteProductModal";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,9 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 import AddProductPage from "./AddProductPage";
 import AllUsers from "./AllUsers";
 import AllProducts from "./AllProducts";
+import CreateProductForFarmer from "./CreateProductForFarmer";
 
 const Dashboard = () => {
-  const [activeContent, setActiveContent] = useState("all-products");
+  const [activeContent, setActiveContent] = useState("create-product");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
   const [products, setProducts] = useState([]);
@@ -23,7 +23,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [deletingUserId, setDeletingUserId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
-
 
   const farmerFirstName = localStorage.getItem("firstName");
 
@@ -44,7 +43,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
@@ -68,7 +67,6 @@ const Dashboard = () => {
     }
     console.log(activeContent);
   }, [activeContent]);
-
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -103,20 +101,33 @@ const Dashboard = () => {
     switch (activeContent) {
       case "create-product":
         return (
-          <AddProductPage 
+          <AddProductPage
             onShow={() => setCreateNewProductModal(!createNewProductModal)}
           />
         );
       case "all-products":
         return (
           <>
-            <AllProducts loading={loading} products={products} setShowDeleteModal={setShowDeleteModal} setSelectedProduct={setSelectedProduct} setProducts={setProducts} />
+            <AllProducts
+              loading={loading}
+              products={products}
+              setShowDeleteModal={setShowDeleteModal}
+              setSelectedProduct={setSelectedProduct}
+              setProducts={setProducts}
+            />
           </>
         );
       case "registered-users":
         return (
           <div>
-            <AllUsers loading={loading} users={users} deletingUserId={deletingUserId} setDeletingUserId={setDeletingUserId} setUsers={setUsers} setIsDeleting={setIsDeleting} />
+            <AllUsers
+              loading={loading}
+              users={users}
+              deletingUserId={deletingUserId}
+              setDeletingUserId={setDeletingUserId}
+              setUsers={setUsers}
+              setIsDeleting={setIsDeleting}
+            />
           </div>
         );
       default:
@@ -138,9 +149,9 @@ const Dashboard = () => {
           className="text-gray-700 focus:outline-none"
         >
           {sidebarOpen ? (
-            <MdOutlineClose className="text-2xl" />
+            <MdOutlineClose className="text-2xl text-white" />
           ) : (
-            <HiOutlineMenuAlt2 className="text-2xl" />
+            <HiOutlineMenuAlt2 className="text-2xl " />
           )}
         </button>
       </div>
@@ -153,12 +164,12 @@ const Dashboard = () => {
       )}
 
       <div
-        className={`fixed lg:static z-40 w-60 bg-white shadow-md h-full lg:h-auto transition-transform transform ${
+        className={`fixed lg:static z-40 w-60 bg-[#2E982D] shadow-md h-full lg:h-auto transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
         <div className={`px-4 ${sidebarOpen ? "pt-14 pb-6" : "py-6"}`}>
-          <h2 className="md:text-xl font-semibold text-[#2E982D]">
+          <h2 className="md:text-xl font-semibold text-white">
             Admin Dashboard
           </h2>
         </div>
@@ -171,8 +182,10 @@ const Dashboard = () => {
                   setActiveContent("create-product");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "create-product" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "create-product"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 Create a product
@@ -184,8 +197,10 @@ const Dashboard = () => {
                   setActiveContent("all-products");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "all-products" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "all-products"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 All products
@@ -197,8 +212,10 @@ const Dashboard = () => {
                   setActiveContent("registered-users");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "registered-users" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "registered-users"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 Users
@@ -208,7 +225,7 @@ const Dashboard = () => {
         </nav>
         <button
           onClick={handleLogout}
-          className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-red-500 text-white font-medium mt-60 rounded-md"
+          className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-white hover:text-black duration-300 text-red-500 font-medium mt-40 rounded-md"
         >
           Logout
         </button>
@@ -230,7 +247,7 @@ const Dashboard = () => {
             }
           }}
         >
-          <CreateNewProduct onSuccess={handleProductCreationSuccess} />
+          <CreateProductForFarmer onSuccess={handleProductCreationSuccess} />
         </div>
       )}
 

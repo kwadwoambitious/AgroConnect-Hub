@@ -8,20 +8,19 @@ const Orders = () => {
   const [isLoading, setIsLoading] = useState(false); // State to manage loading indicator
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control user details modal visibility
   const [selectedOrder, setSelectedOrder] = useState(null); // State to hold the selected order details
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State to control delete confirmation modal visibility
-  const [orderIdToDelete, setOrderIdToDelete] = useState(null); // State to hold the order ID to be deleted
+  const [productsList, setProductsList] = useState([]); // State to hold the list of products
 
   // Retrieve the token from localStorage
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
-  // Fetch orders data when the component mounts
+  // Fetch products data when the component mounts
   useEffect(() => {
-    setIsLoading(true); // Set loading to true when fetching starts
-    fetch("https://api-agroconnect.onrender.com/api/v1/orders/", {
+    fetch("https://api-agroconnect.onrender.com/api/v1/products", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the token here
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -32,9 +31,47 @@ const Orders = () => {
       })
       .then((data) => {
         if (data.status === "success") {
-          setOrders(data.data.orderList); // Correctly setting the orders state
-          setTotalOrders(data.results); // Total number of orders
-          console.log("Orders set:", data.data.orderList);
+          setProductsList(data.data.products); // Correctly setting the products list state
+          console.log("Products set:", data.data.products);
+        } else {
+          console.error("Failed to fetch products:", data); // Error handling
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+        setError(error.message); // Set error message to display
+      });
+  }, [token]); // Ensure useEffect re-runs if the token changes
+
+  // Fetch orders data when the component mounts
+  useEffect(() => {
+    setIsLoading(true); // Set loading to true when fetching starts
+    fetch("https://api-agroconnect.onrender.com/api/v1/orders/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === "success") {
+          // Filter orders for the specific farmer based on the product's farmer property
+          const farmerOrders = data.data.orderList.filter((order) =>
+            order.orderItems.some((itemId) => {
+              const product = productsList.find((product) => product._id === itemId);
+              return product && product.farmer === userId;
+            })
+          );
+
+          setOrders(farmerOrders); // Correctly setting the orders state
+          setTotalOrders(farmerOrders.length); // Total number of orders
+          console.log("Orders set:", farmerOrders);
         } else {
           console.error("Failed to fetch orders:", data); // Error handling
         }
@@ -46,7 +83,7 @@ const Orders = () => {
       .finally(() => {
         setIsLoading(false); // Set loading to false when fetching is done
       });
-  }, [token]); // Ensure useEffect re-runs if the token changes
+  }, [token, productsList]); // Ensure useEffect re-runs if the token or productsList changes
 
   // Function to handle showing the modal with user details
   const handleViewUserDetails = (order) => {
@@ -54,54 +91,8 @@ const Orders = () => {
     setIsModalOpen(true);
   };
 
-  // Function to handle showing the delete confirmation modal
-  // const handleDeleteOrder = (orderId) => {
-  //   setOrderIdToDelete(orderId); // Set the order ID to be deleted
-  //   setIsDeleteModalOpen(true); // Show the delete confirmation modal
-  // };
-
-  // Function to confirm the deletion of an order
-  // const confirmDeleteOrder = () => {
-  //   fetch(
-  //     `https://api-agroconnect.onrender.com/api/v1/orders/${orderIdToDelete}`,
-  //     {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   )
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       if (data.status === "success") {
-  //         setOrders((prevOrders) =>
-  //           prevOrders.filter((order) => order._id !== orderIdToDelete)
-  //         ); // Remove the deleted order from the state
-  //         setTotalOrders((prevTotal) => prevTotal - 1); // Decrease the total number of orders
-  //         console.log("Order deleted successfully");
-  //       } else {
-  //         console.error("Failed to delete order:", data); // Error handling
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("There was a problem with the delete operation:", error);
-  //       setError(error.message); // Set error message to display
-  //     })
-  //     .finally(() => {
-  //       setIsDeleteModalOpen(false); // Close the delete confirmation modal
-  //       setOrderIdToDelete(null); // Reset the order ID to be deleted
-  //     });
-  // };
-
   return (
-    <div className="px-3 mt-20">
-      <h2 className="mb-2 font-semibold text-2xl text-center">Order List</h2>
+    <div className="px-3">
       {error ? (
         <p className="mb-5 text-lg text-red-500">Error: {error}</p>
       ) : isLoading ? (
@@ -111,65 +102,79 @@ const Orders = () => {
         </div>
       ) : (
         <>
-          <p className="mb-5 text-lg text-center">Total Orders: {totalOrders}</p>
+          <h2 className="mb-2 font-semibold text-2xl text-center mt-20">
+            Order List
+          </h2>
+          <p className="mb-5 text-lg text-center">
+            Total Orders: {totalOrders}
+          </p>
           <div className="w-full my-10">
             <div className="overflow-x-auto">
-              <table
-                border="1"
-                cellPadding="10"
-                cellSpacing="0"
-                className="min-w-full border-collapse border"
-              >
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="text-[10px] md:text-base text-center border">Order ID</th>
-                    <th className="text-[10px] md:text-base text-center border">Qty</th>
-                    <th className="text-[10px] md:text-base text-center border">Total</th>
-                    <th className="text-[10px] md:text-base text-center border">Date</th>
-                    <th className="text-[10px] md:text-base text-center border">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {orders.length === 0 ? (
+              <div className="max-h-96 overflow-y-auto">
+                <table
+                  border="1"
+                  cellPadding="10"
+                  cellSpacing="0"
+                  className="min-w-full border-collapse border"
+                >
+                  <thead className="bg-gray-50">
                     <tr>
-                      <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
-                        No orders available
-                      </td>
+                      <th className="text-[10px] md:text-base text-center border">
+                        Order ID
+                      </th>
+                      <th className="text-[10px] md:text-base text-center border">
+                        Qty
+                      </th>
+                      <th className="text-[10px] md:text-base text-center border">
+                        Total
+                      </th>
+                      <th className="text-[10px] md:text-base text-center border">
+                        Date
+                      </th>
+                      <th className="text-[10px] md:text-base text-center border">
+                        Action
+                      </th>
                     </tr>
-                  ) : (
-                    orders.map((order, index) => (
-                      <tr key={order._id}>
-                        <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                          {index + 1}
-                        </td>
-                        <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                          {order.orderItems.length}
-                        </td>
-                        <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                          ₵{order.totalPrice}
-                        </td>
-                        <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                          {new Date(order.createdAt).toLocaleDateString()}
-                        </td>
-                        <td className="flex items-center justify-center flex-wrap gap-2">
-                          <button
-                            onClick={() => handleViewUserDetails(order)}
-                            className="text-indigo-600 hover:text-indigo-900 text-[10px] md:text-[15px]"
-                          >
-                            View
-                          </button>
-                          {/* <button
-                            onClick={() => handleDeleteOrder(order._id)}
-                            className="text-red-600 hover:text-red-900 text-[10px] md:text-[15px]"
-                          >
-                            Delete
-                          </button> */}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {orders.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan="6"
+                          className="px-6 py-4 text-center text-sm text-gray-500"
+                        >
+                          No orders available
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      orders.map((order, index) => (
+                        <tr key={order._id}>
+                          <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            {index + 1}
+                          </td>
+                          <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            {order.orderItems.length}
+                          </td>
+                          <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            ₵{order.totalPrice}
+                          </td>
+                          <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            {new Date(order.createdAt).toLocaleDateString()}
+                          </td>
+                          <td className="flex items-center justify-center flex-wrap gap-2">
+                            <button
+                              onClick={() => handleViewUserDetails(order)}
+                              className="bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] w-14 lg:w-auto rounded-md"
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div> {/* End of wrapper div */}
             </div>
           </div>
         </>
@@ -181,30 +186,6 @@ const Orders = () => {
         user={selectedOrder ? selectedOrder.user : null}
         phone={selectedOrder ? selectedOrder.phone : null}
       />
-{/* 
-      {isDeleteModalOpen && (
-        <div className="fixed bg-gray-600 bg-opacity-80 inset-0 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <p className="mb-4 text-gray-800">
-              Are you sure you want to delete this order?
-            </p>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded mr-2"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDeleteOrder}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };

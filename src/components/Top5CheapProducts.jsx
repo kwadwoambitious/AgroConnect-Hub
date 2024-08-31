@@ -53,7 +53,7 @@ const Top5CheapProducts = () => {
       {loading ? (
         <>
           <div className="submit-loader2 mx-auto mt-10"></div>
-          <p className="text-center">Loading...</p>
+          <p className="text-center">Loading Products...</p>
         </>
       ) : products.length > 0 ? (
         <div>

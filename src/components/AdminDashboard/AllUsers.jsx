@@ -91,7 +91,7 @@ const AllUsers = ({
                             </td> */}
                       <td className="text-center border p-2">
                         <button
-                          className="bg-red-500 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] rounded-md"
+                          className="bg-red-500  hover:bg-red-700 transition duration-300 text-white py-1 px-2 md:px-3 md:py-2 border-none text-[10px] md:text-[15px] rounded-md"
                           onClick={() => handleDeleteUser(user._id)}
                         >
                           {deletingUserId === user._id ? "Deleting" : "Delete"}

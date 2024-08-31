@@ -163,8 +163,8 @@ const ProfileSettings = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="bg-[#2e982d] text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-[#1e6a1e] transition duration-300 ease-in-out text-sm lg:text-base"
-              disabled={profileLoading || passwordLoading}  // Disable button if either loading state is true
+              className="bg-[#2e982d] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#1e6a1e] transition duration-300 ease-in-out text-sm lg:text-base"
+              disabled={profileLoading || passwordLoading}
             >
               {profileLoading ? "Updating..." : "Update"}
             </button>
@@ -251,7 +251,7 @@ const ProfileSettings = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-[#2e982d] text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-[#1e6a1e] transition duration-300 ease-in-out text-sm lg:text-base"
+              className="bg-[#2e982d] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#1e6a1e] transition duration-300 ease-in-out text-sm lg:text-base"
               disabled={passwordLoading || profileLoading}  // Disable button if either loading state is true
             >
               {passwordLoading ? "Changing..." : "Change Password"}

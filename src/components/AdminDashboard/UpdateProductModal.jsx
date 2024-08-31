@@ -184,15 +184,15 @@ const UpdateProductModal = ({
           >
             {loading ? "Updating..." : "Update Product"}
           </button>
-        </form>
 
-        {/* Close Modal Button */}
+          {/* Close Modal Button */}
         <button
           onClick={() => setShowUpdateModal(false)}
           className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300"
         >
           Cancel
         </button>
+        </form>
       </div>
     </div>
   );

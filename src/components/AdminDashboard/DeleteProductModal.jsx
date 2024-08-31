@@ -54,14 +54,14 @@ const DeleteProductModal = ({ show, productId, onClose, onDeleteSuccess }) => {
         </p>
         <div className="flex justify-around">
           <button
-            className={`bg-red-500 text-white text-center px-8 py-2 ${isDeleting ? "w-32" : "w-24"} rounded-md`}
+            className={`bg-red-500 hover:bg-red-700 transition duration-300 text-white text-center px-8 py-2 ${isDeleting ? "w-32" : "w-24"} rounded-md`}
             onClick={handleDelete}
             disabled={isDeleting}
           >
             {isDeleting ? "Deleting..." : "Yes"}
           </button>
           <button
-            className="bg-gray-300 text-black px-8 py-2 w-24 rounded-md text-center"
+            className="bg-gray-300 hover:bg-gray-400 transition duration-300 text-black px-8 py-2 w-24 rounded-md text-center"
             onClick={onClose}
             disabled={isDeleting}
           >

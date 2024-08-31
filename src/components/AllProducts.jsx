@@ -45,6 +45,7 @@ const AllProducts = () => {
 
   const handleViewDetails = (product) => {
     setSelectedProduct(product);
+    console.log(product._id);
   };
 
   const handleCloseModal = () => {
@@ -78,7 +79,7 @@ const AllProducts = () => {
         {loading ? (
           <>
             <div className="submit-loader2 mx-auto mt-10"></div>
-            <p className="text-center">Loading...</p>
+            <p className="text-center">Loading Products...</p>
           </>
         ) : filteredProducts.length > 0 ? (
           <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-0 md:gap-5 md:gap-y-12">

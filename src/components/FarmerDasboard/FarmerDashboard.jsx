@@ -8,11 +8,11 @@ import ProfileSettings from "./ProfileSettings";
 import { useNavigate } from "react-router-dom";
 import DashboardChart from "./DashboardChart";
 import AddProductPage from "../AdminDashboard/AddProductPage";
-import CreateNewProduct from "../AdminDashboard/CreateNewProduct";
+import CreateNewProduct from "./CreateNewProduct";
 import FarmerProducts from "./FarmerProducts";
 
 function FarmerDashboard() {
-  const [activeContent, setActiveContent] = useState("products");
+  const [activeContent, setActiveContent] = useState("orders");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
 
@@ -46,12 +46,12 @@ function FarmerDashboard() {
 
   const renderContent = () => {
     switch (activeContent) {
-      case "dashboard":
-        return (
-          <div className="px-8 overflow-y-auto min-h-screen">
-            <DashboardChart />
-          </div>
-        );
+      // case "dashboard":
+      //   return (
+      //     <div className="px-8 overflow-y-auto min-h-screen">
+      //       <DashboardChart />
+      //     </div>
+      //   );
       case "orders":
         return <Orders />;
       case "products":
@@ -65,7 +65,7 @@ function FarmerDashboard() {
       case "profile-settings":
         return <ProfileSettings />;
       default:
-        return <div>Dashboard content</div>;
+        return <Orders />;
     }
   };
 
@@ -83,7 +83,7 @@ function FarmerDashboard() {
           className="text-gray-700 focus:outline-none"
         >
           {sidebarOpen ? (
-            <MdOutlineClose className="text-2xl" />
+            <MdOutlineClose className="text-2xl text-white" />
           ) : (
             <HiOutlineMenuAlt2 className="text-2xl" />
           )}
@@ -98,39 +98,41 @@ function FarmerDashboard() {
       )}
 
       <aside
-        className={`fixed lg:static z-40 w-60 bg-white shadow-md h-full lg:h-auto transition-transform transform ${
+        className={`fixed lg:static z-40 w-60 bg-[#2E982D] shadow-md h-full lg:h-auto transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
         <div className={`px-4 ${sidebarOpen ? "pt-14 pb-6" : "py-6"}`}>
-          <h2 className="md:text-xl font-semibold text-[#2E982D]">
+          <h2 className="md:text-xl font-semibold text-white">
             Farmer Dashboard
           </h2>
         </div>
         <hr />
         <nav className="mt-8">
           <ul>
-            <li className="mb-2">
+            {/* <li className="mb-2">
               <button
                 onClick={() => {
                   setActiveContent("dashboard");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "dashboard" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "dashboard" ? "bg-white text-black" : "text-white"
                 }`}
               >
                 Dashboard
               </button>
-            </li>
+            </li> */}
             <li className="mb-2">
               <button
                 onClick={() => {
                   setActiveContent("orders");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "orders" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "orders"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 Orders
@@ -142,8 +144,10 @@ function FarmerDashboard() {
                   setActiveContent("products");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "products" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "products"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 My Products
@@ -155,8 +159,10 @@ function FarmerDashboard() {
                   setActiveContent("add-product");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "add-product" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "add-product"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 Add a Product
@@ -168,8 +174,10 @@ function FarmerDashboard() {
                   setActiveContent("profile-settings");
                   setSidebarOpen(false);
                 }}
-                className={`w-full text-[15px] md:text-base text-left px-4 py-2 text-gray-700 hover:bg-gray-200 transition ${
-                  activeContent === "profile-settings" ? "bg-gray-300" : ""
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "profile-settings"
+                    ? "bg-white text-black"
+                    : "text-white"
                 }`}
               >
                 Profile Settings
@@ -179,7 +187,7 @@ function FarmerDashboard() {
         </nav>
         <button
           onClick={handleLogout}
-          className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-red-500 text-white font-medium mt-40 rounded-md"
+          className="w-[50%] block mx-auto text-center text-[15px] md:text-base px-4 py-2 transition bg-white hover:text-black duration-300 text-red-500 font-medium mt-40 rounded-md"
         >
           Logout
         </button>
