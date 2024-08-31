@@ -80,7 +80,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
           <p className="text-center text-red-500">Login first to review this product!</p>
         ) : (
           <>
-            <h2 className="text-xl lg:text-2xl font-semibold mb-4 text-center">
+            <h2 className="text-xl lg:text-2xl font-semibold mb-4 text-center text-gray-700">
               Submit Your Review
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">

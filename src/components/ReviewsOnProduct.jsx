@@ -3,7 +3,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 const ReviewsOnProduct = ({ productId, onClose }) => {
   const [reviewData, setReviewData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -46,9 +46,11 @@ const ReviewsOnProduct = ({ productId, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center backdrop-blur-md items-center z-[90]">
-      <div className="bg-white rounded-lg p-6 w-11/12 md:w-1/2 lg:w-1/3 max-h-96 overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Review Details</h2>
+      <div className="bg-white rounded-lg p-6 w-11/12 md:w-1/2 lg:w-1/3 max-h-[100vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-7">
+          <h2 className="text-xl font-semibold text-gray-700">
+            Review Details ({reviewData.length})
+          </h2>
           <button
             className="text-gray-500 hover:text-gray-700"
             onClick={onClose}
