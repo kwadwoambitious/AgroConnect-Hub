@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import Dashboard from "./components/AdminDashboard/Dashboard";
 import Checkout from "./components/Checkout";
 import FarmerDashboard from "./components/FarmerDasboard/FarmerDashboard";
+import UsersOrders from "./components/UsersOrders";
 
 function App({ showModal }) {
   return (
@@ -40,6 +41,7 @@ function App({ showModal }) {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/shop" element={<AllProducts />} />
+              <Route path="/my-orders" element={<UsersOrders />} />
               <Route path="/category/:categoryName" element={<Category />} />
 
               {/* Protect the /admin-dashboard route for admins */}

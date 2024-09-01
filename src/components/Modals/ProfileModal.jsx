@@ -63,7 +63,7 @@ const ProfileModal = ({ onClickLink }) => {
           </div>
         </Link>
 
-        <Link to="/" onClick={onClickLink} className="group">
+        <Link to="/my-orders" onClick={onClickLink} className="group">
           <div className="group flex items-center transition duration-300 ease-in-out hover:bg-gray-100 py-3 px-3 rounded-md">
             <IoBagHandleOutline className="font-extrabold md:text-xl text-[#0f172ac7] group-hover:text-[#2E982D] inline-block mr-2 md:mr-3" />
             <span className="flex items-center font-medium text-[#0f172ac7] text-[12px] md:text-[15px] group-hover:text-[#2E982D]">

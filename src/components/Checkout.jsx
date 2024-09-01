@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const Checkout = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const totalAmount = localStorage.getItem("totalAmount");
   const navigate = useNavigate();
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
-  const name = localStorage.getItem("userName");
-  const email = localStorage.getItem("userEmail");
   const phone = localStorage.getItem("userPhone");
   const userId = localStorage.getItem("userId");
 
@@ -19,33 +16,41 @@ const Checkout = () => {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const orderItems = cart.map((item) => ({
     quantity: item.quantity, // Assuming the cart items have a quantity field
-    product: item._id,  // Assuming the cart items have a productId field
-    farmer: item.farmer  // Assuming the cart items have a farmer field
+    product: item._id, // Assuming the cart items have a productId field
+    farmer: item.farmer, // Assuming the cart items have a farmer field
   }));
 
   console.log("The user id", userId);
 
+  console.log(orderItems)
+
   const handleOrder = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch('https://api-agroconnect.onrender.com/api/v1/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include authorization token if needed
-        },
-        body: JSON.stringify({
-          orderItems: orderItems,
-          phone: phone,
-          user: userId,
-        }),
-      });
+      const response = await fetch(
+        "https://api-agroconnect.onrender.com/api/v1/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Include authorization token if needed
+          },
+          body: JSON.stringify({
+            orderItems: orderItems,
+            phone: phone,
+            user: userId,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Order created successfully:", data);
-        alert("Order created successfully!");
-        localStorage.removeItem('cart');
+        setIsLoading(false);
+        toast.success("Order created successfully!", {
+          autoClose: 2000,
+        });
+        localStorage.removeItem("cart");
         navigate("/shop");
       } else {
         console.error("Error creating order:", data);
@@ -55,7 +60,7 @@ const Checkout = () => {
       console.error("Error:", error);
       alert("An error occurred while creating the order.");
     } finally {
-      closeModal();
+     
     }
   };
 
@@ -98,71 +103,13 @@ const Checkout = () => {
           <button
             className="w-full bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white py-3 rounded-lg font-semibold"
             onClick={handleOrder}
+            disabled={isLoading}
           >
-            Confirm
+            {isLoading ? "Sending Order..." : "Send Order"}
           </button>
         </div>
+        <ToastContainer />
       </div>
-
-      {/* Modal Overlay */}
-      {/* {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg max-w-96 w-[95%]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold inline-block">User Contact Info</h2>
-              <IoCloseCircleOutline className="text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out cursor-pointer" onClick={closeModal} />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Name</label>
-              <input
-                type="text"
-                className="w-full border rounded-lg p-2 placeholder:text-[14px]"
-                placeholder="Enter your name"
-                value={name}
-                disabled
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Email</label>
-              <input
-                type="email"
-                className="w-full border rounded-lg p-2 placeholder:text-[14px]"
-                placeholder="Enter your email"
-                value={email}
-                disabled
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                className="w-full border rounded-lg p-2 placeholder:text-[14px]"
-                placeholder="Enter your phone number"
-                value={phone}
-                disabled
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Location</label>
-              <input
-                type="text"
-                className="w-full border rounded-lg p-2 placeholder:text-[14px]"
-                placeholder="Enter your location"
-              />
-            </div>
-            <div className="flex justify-end">
-              <button></button>
-              <button
-                className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white py-2 px-4 rounded-lg font-semibold"
-              >
-                Make Order
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </>
   );
 };

@@ -3,13 +3,12 @@ import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { MdOutlineClose } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Orders from "./Orders";
 import ProfileSettings from "./ProfileSettings";
 import { useNavigate } from "react-router-dom";
-import DashboardChart from "./DashboardChart";
 import AddProductPage from "../AdminDashboard/AddProductPage";
 import CreateNewProduct from "./CreateNewProduct";
 import FarmerProducts from "./FarmerProducts";
+import FarmerOrders from "./FarmerOrders";
 
 function FarmerDashboard() {
   const [activeContent, setActiveContent] = useState("orders");
@@ -53,7 +52,7 @@ function FarmerDashboard() {
       //     </div>
       //   );
       case "orders":
-        return <Orders />;
+        return <FarmerOrders />;
       case "products":
         return <FarmerProducts activeContent={activeContent} />;
       case "add-product":
@@ -65,7 +64,7 @@ function FarmerDashboard() {
       case "profile-settings":
         return <ProfileSettings />;
       default:
-        return <Orders />;
+        return <FarmerOrders />;
     }
   };
 

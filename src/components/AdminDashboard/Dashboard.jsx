@@ -10,6 +10,7 @@ import AddProductPage from "./AddProductPage";
 import AllUsers from "./AllUsers";
 import AllProducts from "./AllProducts";
 import CreateProductForFarmer from "./CreateProductForFarmer";
+import Orders from "./Orders";
 
 const Dashboard = () => {
   const [activeContent, setActiveContent] = useState("create-product");
@@ -117,6 +118,12 @@ const Dashboard = () => {
             />
           </>
         );
+      case "orders":
+        return (
+          <div>
+            <Orders />
+          </div>
+        );
       case "registered-users":
         return (
           <div>
@@ -204,6 +211,21 @@ const Dashboard = () => {
                 }`}
               >
                 All products
+              </button>
+            </li>
+            <li className="mb-4">
+              <button
+                onClick={() => {
+                  setActiveContent("orders");
+                  setSidebarOpen(false);
+                }}
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "registered-users"
+                    ? "bg-white text-black"
+                    : "text-white"
+                }`}
+              >
+                Orders
               </button>
             </li>
             <li>
