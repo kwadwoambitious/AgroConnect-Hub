@@ -35,12 +35,6 @@ const Signup = () => {
       ...prevFormData,
       [name]: value,
     }));
-    
-    // Log here for debugging (could also be inside handleSubmit for clarity)
-    // console.log("Updated formData in handleChange:", {
-    //   ...formData,
-    //   [name]: value,
-    // });
   };
 
   const handlePasswordFocus = () => setIsPasswordFocused(true);

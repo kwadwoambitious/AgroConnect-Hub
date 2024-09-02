@@ -48,6 +48,7 @@ const AllUsers = ({
             Registered Users
           </h2>
           <div className="overflow-x-auto my-10">
+            <div className="max-h-96">
             <table
               border="1"
               cellPadding="10"
@@ -108,6 +109,7 @@ const AllUsers = ({
                 )}
               </tbody>
             </table>
+            </div>
           </div>
         </>
       )}

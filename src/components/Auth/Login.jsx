@@ -37,11 +37,10 @@ const Login = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const { latitude, longitude } = position.coords;
-            localStorage.setItem("userLocation", JSON.stringify({
-              latitude,
-              longitude,
-            }));
+            // const { latitude, longitude } = position.coords;
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            localStorage.setItem("userLocation", JSON.stringify({ latitude, longitude }));
             console.log("User location stored:", { latitude, longitude });
             // Navigate after storing location
           },
@@ -49,6 +48,11 @@ const Login = () => {
             console.error("Error getting location:", error);
             // Navigate if location can't be retrieved
             navigate("/shop");
+          },
+          {
+            enableHighAccuracy: true, // Request high accuracy
+            timeout: 10000,           // Timeout after 10 seconds
+            maximumAge: 0             // No caching of location data
           }
         );
       } else {
@@ -59,6 +63,7 @@ const Login = () => {
       navigate(userRole === "admin" ? "/admin-dashboard" : "/farmer-dashboard");
     }
   };
+  
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();

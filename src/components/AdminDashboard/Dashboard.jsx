@@ -11,9 +11,10 @@ import AllUsers from "./AllUsers";
 import AllProducts from "./AllProducts";
 import CreateProductForFarmer from "./CreateProductForFarmer";
 import Orders from "./Orders";
+import AddUsers from "./AddUsers";
 
 const Dashboard = () => {
-  const [activeContent, setActiveContent] = useState("create-product");
+  const [activeContent, setActiveContent] = useState("add-users");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
   const [products, setProducts] = useState([]);
@@ -137,6 +138,12 @@ const Dashboard = () => {
             />
           </div>
         );
+        // case "add-users":
+        // return (
+        //   <div>
+        //     <AddUsers />
+        //   </div>
+        // );
       default:
         return null;
     }
@@ -220,7 +227,7 @@ const Dashboard = () => {
                   setSidebarOpen(false);
                 }}
                 className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
-                  activeContent === "registered-users"
+                  activeContent === "orders"
                     ? "bg-white text-black"
                     : "text-white"
                 }`}
@@ -228,7 +235,7 @@ const Dashboard = () => {
                 Orders
               </button>
             </li>
-            <li>
+            <li className="mb-4">
               <button
                 onClick={() => {
                   setActiveContent("registered-users");
@@ -240,9 +247,24 @@ const Dashboard = () => {
                     : "text-white"
                 }`}
               >
-                Users
+                See All Users
               </button>
             </li>
+            {/* <li className="mb-4">
+              <button
+                onClick={() => {
+                  setActiveContent("add-users");
+                  setSidebarOpen(false);
+                }}
+                className={`w-full text-[15px] md:text-base text-left px-4 py-2 hover:bg-white hover:text-black transition ${
+                  activeContent === "add-users"
+                    ? "bg-white text-black"
+                    : "text-white"
+                }`}
+              >
+                Add Users
+              </button>
+            </li> */}
           </ul>
         </nav>
         <button

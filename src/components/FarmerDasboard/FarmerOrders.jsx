@@ -11,12 +11,11 @@ const FarmerOrders = () => {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  console.log(userId)
 
   // Fetch orders data when the component mounts
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://api-agroconnect.onrender.com/api/v1/orders/user-orders/${userId}`, {
+    fetch(`https://api-agroconnect.onrender.com/api/v1/orders/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,8 +30,12 @@ const FarmerOrders = () => {
       })
       .then((data) => {
         if (data.status === "success") {
-          setOrders(data.data);
-          setTotalOrders(data.results);
+          // Filter orders based on the userId
+          const farmerOrders = data.data.orderList.filter(
+            (order) => order.farmer === userId
+          );
+          setOrders(farmerOrders);
+          setTotalOrders(farmerOrders.length);
         } else {
           console.error("Failed to fetch orders:", data);
         }
@@ -82,9 +85,9 @@ const FarmerOrders = () => {
                       <th className="text-[10px] md:text-base text-center border">
                         Order ID
                       </th>
-                      <th className="text-[10px] md:text-base text-center border">
+                      {/* <th className="text-[10px] md:text-base text-center border">
                         Product Names
-                      </th>
+                      </th> */}
                       <th className="text-[10px] md:text-base text-center border">
                         Qty
                       </th>
@@ -115,11 +118,11 @@ const FarmerOrders = () => {
                           <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                             {index + 1}
                           </td>
-                          <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                          {/* <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                             {order.orderItems
                               .map((item) => item.product.name)
                               .join(", ")}
-                          </td>
+                          </td> */}
                           <td className="text-[9px] md:text-[15px] text-center border px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                             {order.orderItems.length}
                           </td>

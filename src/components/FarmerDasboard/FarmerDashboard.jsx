@@ -48,7 +48,7 @@ function FarmerDashboard() {
       // case "dashboard":
       //   return (
       //     <div className="px-8 overflow-y-auto min-h-screen">
-      //       <DashboardChart />
+      //       <DashboardChart /> 
       //     </div>
       //   );
       case "orders":

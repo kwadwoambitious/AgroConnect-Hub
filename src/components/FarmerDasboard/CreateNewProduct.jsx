@@ -13,8 +13,8 @@ const CreateNewProduct = ({ onSuccess }) => {
     description: "",
     imageCover: "",
     images: "",
-    longitude: "",
-    latitude: ""
+    latitude: "",
+    longitude: ""
   });
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +39,7 @@ const CreateNewProduct = ({ onSuccess }) => {
       productLocation:
         {
           type: "Point",
-          coordinates: [parseFloat(productData.longitude), parseFloat(productData.latitude)],
+          coordinates: [parseFloat(productData.latitude), parseFloat(productData.longitude)],
         },
       farmer: userId, // Set the farmer field to userId
     };
@@ -64,8 +64,8 @@ const CreateNewProduct = ({ onSuccess }) => {
         description: "",
         imageCover: "",
         images: "",
-        longitude: "",
-        latitude: ""
+        latitude: "",
+        longitude: ""
       });
 
       toast.success("Product created successfully!", {
@@ -220,19 +220,6 @@ const CreateNewProduct = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Longitude input field */}
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2 text-[14px]">Longitude</label>
-          <input
-            type="text"
-            name="longitude"
-            value={productData.longitude}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md text-[14px]"
-            required
-          />
-        </div>
-
         {/* Latitude input field */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2 text-[14px]">Latitude</label>
@@ -240,6 +227,19 @@ const CreateNewProduct = ({ onSuccess }) => {
             type="text"
             name="latitude"
             value={productData.latitude}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border rounded-md text-[14px]"
+            required
+          />
+        </div>
+
+        {/* Longitude input field */}
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2 text-[14px]">Longitude</label>
+          <input
+            type="text"
+            name="longitude"
+            value={productData.longitude}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border rounded-md text-[14px]"
             required

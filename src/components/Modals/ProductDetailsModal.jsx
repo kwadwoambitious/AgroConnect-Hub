@@ -32,7 +32,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
           if (userLocation) {
             const { latitude, longitude } = userLocation;
             const distanceResponse = await axios.get(
-              `https://api-agroconnect.onrender.com/api/v1/products/distances/${longitude},${latitude}/unit/km`
+              `https://api-agroconnect.onrender.com/api/v1/products/distances/${latitude},${longitude}`
             );
 
             const productDistanceData = distanceResponse.data.data.data.find(
