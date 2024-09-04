@@ -4,6 +4,7 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useCart } from "./CartContext";
 import ProductDetailsModal from "./Modals/ProductDetailsModal";
+import { StarRating } from "./StarRating";
 
 const Top5CheapProducts = () => {
   const [products, setProducts] = useState([]);
@@ -87,9 +88,9 @@ const Top5CheapProducts = () => {
                     <span className="font-medium">Quantity:</span>{" "}
                     {product.quantity || "N/A"}
                   </p>
-                  <p className="text-gray-500 text-[12px] md:text-[14px]">
-                    <span className="font-medium">Ratings:</span>{" "}
-                    {product.ratingsAverage} ({product.ratingsQuantity || 0})
+                  <p className="text-gray-500 text-[12px] md:text-[14px] flex items-center">
+                    <span className="font-medium mr-2">Ratings:</span>
+                    <StarRating ratingsAverage={product.ratingsAverage} />
                   </p>
                   <button
                     className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-2 lg:p-[10px] mt-3 rounded font-medium"

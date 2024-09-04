@@ -5,6 +5,7 @@ import { GoComment } from "react-icons/go";
 import { FiEdit3 } from "react-icons/fi";
 import ReviewForm from "../ReviewForm";
 import ReviewsOnProduct from "../ReviewsOnProduct";
+import { StarRating } from "../StarRating";
 
 const ProductDetailsModal = ({ product, onClose }) => {
   const [address, setAddress] = useState("");
@@ -105,10 +106,13 @@ const ProductDetailsModal = ({ product, onClose }) => {
               <span className="font-medium">Quantity:</span> {product.quantity}{" "}
               left in stock
             </p>
+            <p className="text-gray-500 mt-1 mb-6 flex items-center">
+              <span className="font-medium mr-2">Ratings:</span>
+              <StarRating ratingsAverage={product.ratingsAverage} />
+            </p>
             <p className="text-gray-500 mt-1 mb-6">
               <span className="font-medium">Reviews:</span>{" "}
-              <span>Avg.({product.ratingsAverage})</span>{" "}
-              <span>Qty.({product.ratingsQuantity})</span>
+              <span>{product.ratingsQuantity} {product.ratingsQuantity === 1 ? "review" : "reviews"}</span>
             </p>
             <p className="text-gray-500 mt-1 mb-6">
               <span className="font-medium">Location:</span>{" "}

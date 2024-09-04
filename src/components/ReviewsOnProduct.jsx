@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { FaStar, FaRegStar } from "react-icons/fa";
 
 const ReviewsOnProduct = ({ productId, onClose }) => {
   const [reviewData, setReviewData] = useState([]);
@@ -63,7 +64,7 @@ const ReviewsOnProduct = ({ productId, onClose }) => {
           {isLoading ? (
             <div className="flex items-center justify-center flex-col">
               <div className="submit-loader2 mx-auto mt-10"></div>
-              <p className="text-center mt-2 font-semibold">
+              <p className="text-[13px] lg:text-base text-center mt-2 font-semibold">
                 Loading Details...
               </p>
             </div>
@@ -80,18 +81,18 @@ const ReviewsOnProduct = ({ productId, onClose }) => {
                     {review.user.name}
                   </p>
                 </div>
-                <div className="flex items-center mb-2">
-                  <div>
+                <div className="flex items-center mb-2 mt-1">
+                  <div className="flex">
                     {[...Array(5)].map((_, index) => (
                       <span
                         key={index}
-                        className={`text-lg ${
+                        className={`text-[13px] ${
                           index < review.rating
                             ? "text-[#ffc107]"
                             : "text-gray-300"
                         }`}
                       >
-                        ★
+                        {index < review.rating ? <FaStar /> : <FaRegStar />}
                       </span>
                     ))}
                   </div>

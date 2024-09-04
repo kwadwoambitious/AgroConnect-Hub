@@ -6,7 +6,7 @@ import Footer from "./Footer";
 import "../App.css";
 import { useCart } from "./CartContext";
 import ProductDetailsModal from "./Modals/ProductDetailsModal";
-
+import { StarRating } from "./StarRating";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +15,7 @@ const AllProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(Array(products.length).fill(false));
-  const { addToCart } = useCart(); // Use the addToCart function
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,8 +24,7 @@ const AllProducts = () => {
           "https://api-agroconnect.onrender.com/api/v1/products"
         );
         setProducts(response.data.data.data);
-        console.log(response.data.data.data)
-        setFilteredProducts(response.data.data.data); // Set initial filtered products
+        setFilteredProducts(response.data.data.data);
         setLoading(false);
       } catch (error) {
         // Handle error
@@ -36,7 +35,6 @@ const AllProducts = () => {
   }, []);
 
   useEffect(() => {
-    // Filter products based on search term
     const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -45,7 +43,6 @@ const AllProducts = () => {
 
   const handleViewDetails = (product) => {
     setSelectedProduct(product);
-    console.log(product._id);
   };
 
   const handleCloseModal = () => {
@@ -57,10 +54,10 @@ const AllProducts = () => {
       <NavBar logoImage={logo} textColor="text-white" />
       <div className="bg-[#f2f2f2c0] lg:gap-x-10 px-5 xl:px-20 pt-40 pb-24 lg:pt-44 lg:pb-24 mt-[80px] lg:mt-[90px]">
         <h2 className="text-[27px] sm:text-[40px] mt-12 lg:mt-0 mb-2 text-center text-[#111827] font-extrabold">
-        All Available Products
+          All Available Products
         </h2>
         <p className="font-normal md:text-lg text-center text-[#6B7280]">
-        Find the Best Products to Meet Your Needs
+          Find the Best Products to Meet Your Needs
         </p>
 
         {/* Search Bar */}
@@ -111,13 +108,14 @@ const AllProducts = () => {
                     <span className="font-medium">Quantity:</span>{" "}
                     {product.quantity}
                   </p>
-                  <p className="text-gray-500 text-[12px] md:text-[14px]">
-                    <span className="font-medium">Ratings:</span>{" "}
-                    {product.ratingsAverage} ({product.ratingsQuantity})
+                  <p className="text-gray-500 text-[12px] md:text-[14px] flex items-center">
+                    <span className="font-medium mr-1">Ratings:</span>
+                    <StarRating ratingsAverage={product.ratingsAverage} />
                   </p>
+
                   <button
                     className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-2 lg:p-[10px] mt-3 rounded font-medium"
-                    onClick={() => addToCart(product)} // Add product to cart
+                    onClick={() => addToCart(product)}
                   >
                     Add to Cart
                   </button>
@@ -141,7 +139,10 @@ const AllProducts = () => {
       <Footer />
 
       {selectedProduct && (
-        <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
+        <ProductDetailsModal
+          product={selectedProduct}
+          onClose={handleCloseModal}
+        />
       )}
     </>
   );

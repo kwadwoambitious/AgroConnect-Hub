@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import 'react-toastify/dist/ReactToastify.css';
+import { FaStar } from "react-icons/fa";
 
 function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
   const [rating, setRating] = useState(0); // Initialize rating with 0
@@ -85,7 +86,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Rating
                 </label>
                 <div className="star-rating flex justify-start">
@@ -99,18 +100,18 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
                         className="hidden"
                       />
                       <span
-                        className={`star text-3xl cursor-pointer transition duration-200 ${
+                        className={`star text-2xl cursor-pointer transition duration-100 ${
                           (hoverRating || rating) > index ? "text-[#ffc107]" : "text-gray-300"
                         }`}
                       >
-                        ★
+                        <FaStar />
                       </span>
                     </label>
                   ))}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 mt-6 mb-2">
                   Review
                 </label>
                 <textarea
