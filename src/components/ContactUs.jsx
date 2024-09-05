@@ -19,21 +19,7 @@ const ContactUs = () => {
       />
       {/* navBar component ends here */}
 
-      {/* <div className="relative hero-background-2 flex items-center justify-center gap-y-6 px-5 2xl:px-32 sm:py-10 -z-0 pb-20 lg:pb-40 lg:pt-20 pt-[90px]">
-        
-        <div className="bg-[#000000] h-full w-full absolute top-0 opacity-70 z-0"></div>
-        <div className="text-center absolute inset-0 z-100 flex items-center justify-center flex-col">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white">
-            Contact Us
-          </h2>
-          <p className="font-medium lg:text-xl mt-3 text-white max-w-[900px] mx-auto">
-            We'd love to hear from you! Contact us for inquiries, feedback, or
-            support.
-          </p>
-        </div>
-      </div> */}
-
-      <div className="bg-[#f2f2f2c0] w-full px-5 xl:px-32 py-40 lg:py-40">
+      <div className=" w-full px-5 xl:px-32 py-40 lg:py-40">
         <h2 className="text-[27px] sm:text-[40px] mb-2 text-center text-[#111827] font-extrabold">
           Reach Out to Us
         </h2>
@@ -74,7 +60,7 @@ const ContactUs = () => {
                 className="block border p-3 lg:p-4 rounded-sm mb-5 w-full resize-none placeholder:text-[13px] text-[13px] placeholder:lg:text-base lg:text-base focus:outline-none focus:border-[#2E982D] focus:transition focus:duration-500 focus:ease-in-out"
                 required
               ></textarea>
-              <button className="bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl transition duration-300 ease-in-out text-white font-semibold text-sm p-3 rounded-md">
+              <button className="bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl transition duration-300 ease-in-out text-white font-semibold text-sm p-4">
                 Send Message
               </button>
             </form>

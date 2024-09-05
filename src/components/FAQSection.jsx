@@ -38,7 +38,7 @@ const FAQSection = () => {
   ];
 
   return (
-    <div className='px-5 xl:px-20 py-28'>
+    <div className='bg-[#F4F5FF]  px-5 xl:px-20 py-28'>
       <h2 className='text-[27px] sm:text-[40px] mb-2 text-center text-[#111827] font-extrabold'>Frequently Asked Questions</h2>
       <p className='font-normal md:text-lg text-center text-[#6B7280]'>Below are some common questions you may want to ask!</p>
       <div className='mt-12'>

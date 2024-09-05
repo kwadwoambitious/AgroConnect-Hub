@@ -1,6 +1,6 @@
 // Category.js
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios"; // Make sure axios is imported
 import logo from "../assets/images/LOGO.png";
 import NavBar from "./NavBar";
@@ -8,6 +8,7 @@ import Footer from "./Footer";
 import { useCart } from "./CartContext";
 import ProductDetailsModal from "./Modals/ProductDetailsModal";
 import { StarRating } from "./StarRating";
+import { FaRegEye, FaShoppingCart } from "react-icons/fa";
 
 const Category = () => {
   const { categoryName } = useParams(); // Get the category from the URL
@@ -18,7 +19,7 @@ const Category = () => {
   const [loading, setLoading] = useState(true); // State for handling loading
   const [loaded, setLoaded] = useState(Array(products.length).fill(false));
   const [searchTerm, setSearchTerm] = useState("");
-  const { addToCart } = useCart();
+  const { addToCart1 } = useCart();
 
   useEffect(() => {
     // Filter products based on search term
@@ -29,7 +30,11 @@ const Category = () => {
   }, [searchTerm, filteredProducts]);
 
   const normalizeString = (str) =>
-    str.replace(/\s+/g, "").replace(/[^\w]/g, "").replace(/and/g, "").toLowerCase();
+    str
+      .replace(/\s+/g, "")
+      .replace(/[^\w]/g, "")
+      .replace(/and/g, "")
+      .toLowerCase();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -54,12 +59,10 @@ const Category = () => {
     // Filter products by category if products data is available
     if (products && products.length > 0) {
       const normalizedCategoryName = normalizeString(categoryName);
-      console.log("category", normalizedCategoryName)
+      console.log("category", normalizedCategoryName);
       const filtered = products.filter(
-        (product) =>(
+        (product) =>
           normalizeString(product.categories) === normalizedCategoryName
-        )
-        
       );
       setFilteredProducts(filtered);
     }
@@ -70,14 +73,6 @@ const Category = () => {
     .replace(/-/g, " ")
     .replace(/\band\b/g, "&")
     .replace(/\b\w/g, (char) => char.toUpperCase());
-
-  const handleViewDetails = (product) => {
-    setSelectedProduct(product);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedProduct(null);
-  };
 
   return (
     <>
@@ -90,23 +85,23 @@ const Category = () => {
 
       {/* Search Bar */}
       <div className="fixed top-[90px] left-0 right-0 bg-[#2E982D] p-5 z-50">
-          <div className="flex justify-center">
-            <input
-              type="text"
-              className="border rounded-full w-full max-w-md p-2 px-4 focus:outline-none focus:ring-1 lg:focus:ring-2 focus:ring-black text-[14px] lg:text-[15px]"
-              placeholder="Search for a product..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+        <div className="flex justify-center">
+          <input
+            type="text"
+            className="border rounded-full w-full max-w-md p-2 px-4 focus:outline-none focus:ring-1 lg:focus:ring-2 focus:ring-black text-[14px] lg:text-[15px]"
+            placeholder="Search for a product..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
+      </div>
 
-      <div className="bg-[#F4F5FF] lg:gap-x-10 px-5 xl:px-32 mt-20 pt-40 pb-24 lg:pt-32 lg:pb-24">
+      <div className="lg:gap-x-10 px-5 xl:px-32 mt-20 pt-40 pb-24 lg:pt-32 lg:pb-24">
         <h1 className="text-[27px] sm:text-[40px] mb-2 text-center text-[#111827] font-extrabold">
           {formattedCategoryName}
         </h1>
         <p className="text-[23px] sm:text-[30px] text-center font-semibold text-[#111827]">
-          ({filteredProducts.length} products)
+          ({filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"})
         </p>
         {loading ? (
           <>
@@ -114,53 +109,57 @@ const Category = () => {
             <p className="text-center">Loading...</p>
           </>
         ) : filteredProducts.length > 0 ? (
-          <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-0 md:gap-5 md:gap-y-12">
+          <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-0 md:gap-5 md:gap-y-12">
             {filteredProducts.map((product, index) => (
               <div
-                key={product._id}
-                className="bg-white shadow-[0px_0px_19px_3px_rgba(0,0,0,0.1);] max-w-[250px] md:max-w-[250px] rounded-xl mx-auto w-full mb-[24px] relative"
-              >
-                <div className="relative w-full md:h-36 h-36 rounded-tl-xl rounded-tr-xl overflow-hidden">
-                  {!loaded[index] && (
-                    <div className="absolute inset-0 bg-gray-300 blur-sm"></div>
-                  )}
-                  <img
-                    loading="lazy"
-                    src={product.imageCover}
-                    alt={product.name}
-                    className="w-full h-36 object-cover transition duration-500 ease-in-out transform hover:scale-105"
+              key={product._id}
+              className="bg-white shadow-[0px_0px_19px_1px_rgba(0,0,0,0.1);] max-w-[250px] md:max-w-[250px]  mx-auto w-full mb-[24px] relative"
+            >
+              <div className="relative w-full md:h-44 h-44 overflow-hidden group">
+                {!loaded[index] && (
+                  <div className="absolute inset-0 bg-gray-300 blur-sm"></div>
+                )}
+
+                {/* Hello text that appears on hover */}
+                <div className="bg-[#0000004b] absolute inset-0 flex items-center justify-center  text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <div className="flex items-center justify-center -translate-y-3 group-hover:translate-y-0 transition delay-100 duration-[300ms] z-10">
+                    <Link to={`/details/${product._id}`}>
+                      <div className="bg-white p-3 rounded-full">
+                        <FaRegEye className="text-[#111827] text-[15px]" />
+                      </div>
+                    </Link>
+                    <div
+                      className="bg-white p-3 rounded-full ml-3 cursor-pointer"
+                      onClick={() => addToCart1(product)}
+                    >
+                      <FaShoppingCart className="text-[#111827] text-[15px]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Image with hover effect */}
+                <img
+                  loading="lazy"
+                  src={product.imageCover}
+                  alt={product.name}
+                  className="w-full h-44 object-cover transition duration-500 ease-in-out transform hover:scale-105 z-10"
+                />
+              </div>
+              <div className="bg-white py-4 w-full">
+                <h3 className="text-[13px] md:text-[16px] text-center font-semibold text-[#111827] mb-1">
+                  {product.name}
+                </h3>
+                <p className="text-[#2E982D] text-[12px] md:text-[20px] text-center font-medium mb-1">
+                  GH₵{product.price}
+                </p>
+                <div className="flex justify-center">
+                  <StarRating
+                    ratingsAverage={product.ratingsAverage}
+                    className="block mx-auto"
                   />
                 </div>
-                <div className="px-4 py-4">
-                  <h3 className="text-[13px] md:text-[15px] font-semibold text-[#111827]">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-500 text-[12px] md:text-[14px]">
-                    <span className="font-medium">Price:</span> ₵{" "}
-                    {product.price}
-                  </p>
-                  <p className="text-gray-500 text-[12px] md:text-[14px]">
-                    <span className="font-medium">Quantity:</span>{" "}
-                    {product.quantity}
-                  </p>
-                  <p className="text-gray-500 text-[12px] md:text-[14px] flex items-center">
-                    <span className="font-medium mr-1">Ratings:</span>
-                    <StarRating ratingsAverage={product.ratingsAverage} />
-                  </p>
-                  <button
-                    className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-2 lg:p-[10px] mt-3 rounded font-medium"
-                    onClick={() => addToCart(product)} // Add product to cart
-                  >
-                    Add to Cart
-                  </button>
-                  <p
-                    className="mt-3 text-blue-500 rounded text-[12px] md:text-[14px] text-center cursor-pointer"
-                    onClick={() => handleViewDetails(product)}
-                  >
-                    View Details
-                  </p>
-                </div>
               </div>
+            </div>
             ))}
           </div>
         ) : (
@@ -173,7 +172,10 @@ const Category = () => {
       <Footer />
 
       {selectedProduct && (
-        <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
+        <ProductDetailsModal
+          product={selectedProduct}
+          onClose={handleCloseModal}
+        />
       )}
     </>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import heroImage from "../assets/images/landing-hero.png";
+import heroImage from "../assets/images/new-hero.png";
 import clientImage from "../assets/images/client-1.webp";
 import clientImage2 from "../assets/images/client-2.webp";
 import { BiSolidQuoteLeft, BiSolidQuoteRight } from "react-icons/bi";
@@ -34,16 +34,17 @@ const LandingPage = () => {
 
         {/* hero section container */}
         {/* <div className="bg-[#2E982D] lg:w-[50%] h-full absolute "></div> */}
-          <div className="w-full md:grid md:grid-cols-2 lg:grid lg:min-h-64 lg:grid-cols-2 xl:min-h-64 bg-[#F3F4F6] pt-[90px]">
+          <div className="w-full md:grid md:grid-cols-2 lg:grid min-h-screen lg:grid-cols-2 pt-[110px]">
             <div className="flex items-center justify-center py-10 lg:py-12 lg:px-32 relative">
               <div className="mx-auto w-[450px] lg:w-[700px] px-4 sm:px-8 md:pl-14 lg:p-0">
                 <h1 className="lg:mb-4 mb-3 text-[30px] font-extrabold leading-none tracking-tight md:text-4xl lg:text-4xl z-30 text-[#2E982D]">
-                Linking Agriculture, Leveraging Innovation!
+                Transforming Agriculture Through Direct Connections
                 </h1>
+                <p className="text-[#111827] font-medium">Experience the future of agriculture with our platform designed to foster direct relationships and enhance market access.</p>
                 <div>
                   <Link
                   to="/register"
-                  className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_5px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 rounded-md w-[133px] md:w-[145px] lg:mx-0 py-[10px] text-sm md:text-base font-semibold relative group block text-center"
+                  className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 w-[133px] md:w-[145px] lg:mx-0 py-[16px] text-sm md:text-base font-semibold relative group block text-center"
                 >
                   Get Started
                   <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">
@@ -66,7 +67,7 @@ const LandingPage = () => {
                 loading="lazy"
                 src={heroImage}
                 alt="hero section image"
-                className={`transition-opacity duration-1000 rounded-sm  w-full object-cover dark:brightness-[1] shadow-[0px_0px_19px_3px_rgba(0,0,0,0.1);] ${
+                className={`transition-opacity duration-1000  w-full object-cover ${
                   imageLoaded ? "opacity-100" : "opacity-0"
                 }`}
                 onLoad={handleImageLoad}
@@ -90,7 +91,7 @@ const LandingPage = () => {
         </p>
         <Link
           to="/login"
-          className="bg-[#ffffff] hover:bg-[#f0f0f0] shadow-2xl transition duration-300 ease-in-out mt-10 px-4 rounded-md w-[140px] text-center block py-[10px] text-sm md:text-base font-semibold text-[#2E982D] mx-auto relative group"
+          className="bg-[#ffffff] hover:bg-[#f0f0f0] shadow-xl transition duration-300 ease-in-out mt-10 px-4 w-[140px] text-center block py-[16px] text-sm md:text-base font-semibold text-[#2E982D] mx-auto relative group"
         >
           Login now
           <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">

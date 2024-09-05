@@ -14,7 +14,7 @@ import Orders from "./Orders";
 import AddUsers from "./AddUsers";
 
 const Dashboard = () => {
-  const [activeContent, setActiveContent] = useState("add-users");
+  const [activeContent, setActiveContent] = useState("create-product");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createNewProductModal, setCreateNewProductModal] = useState(false);
   const [products, setProducts] = useState([]);

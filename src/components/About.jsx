@@ -36,22 +36,7 @@ const About = () => {
       />
       {/* navBar component ends here */}
 
-      {/* <div className="relative hero-background-1 flex items-center justify-center gap-y-6 px-5 2xl:px-32 sm:py-10 -z-0 pb-20 lg:pb-40 lg:pt-20 pt-[90px]">
-
-        <div className="bg-[#000000] h-full w-full absolute top-0 opacity-70 z-0"></div>
-        <div className="text-center absolute inset-0 z-100 flex items-center justify-center flex-col">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white">
-            
-            About Us
-          </h2>
-          <p className="lg:text-xl font-medium mt-3 text-white max-w-[900px] mx-auto">
-            Learn about our mission, values, and what drives us to succeed.
-          </p>
-          
-        </div>
-      </div> */}
-
-      <div className="bg-[#F4F5FF] flex items-center justify-center lg:gap-x-10 px-5 xl:px-32 py-40 lg:py-40">
+      <div className="flex items-center justify-center lg:gap-x-10 px-5 xl:px-32 py-40 lg:py-40">
         <div>
           {!imageLoaded && (
             <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-xl z-[90]">
@@ -88,25 +73,25 @@ const About = () => {
         </div>
       </div>
 
-      <div className="px-5 xl:px-32 py-20 lg:py-40 relative">
+      <div className="bg-[#F4F5FF]  px-5 xl:px-32 py-20 lg:py-40 relative">
         <div className="flex justify-center mb-5 gap-4">
           <button
             onClick={showMissions}
-            className={`px-5 py-2 ${
+            className={`px-5 py-4 ${
               !showValues
                 ? "bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl text-white"
                 : "border border-[#2E982D] text-[#2E982D]"
-            } rounded-md md:text-lg font-semibold`}
+            }  md:text-lg font-semibold`}
           >
             Our Missions
           </button>
           <button
             onClick={showValuesSection}
-            className={`px-5 py-2 ${
+            className={`px-5 py-4 ${
               showValues
                 ? "bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl text-white"
                 : "border border-[#2E982D] text-[#2E982D]"
-            } rounded-md md:text-lg font-semibold`}
+            } md:text-lg font-semibold`}
           >
             Our Values
           </button>

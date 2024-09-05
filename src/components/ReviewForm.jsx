@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { IoCloseCircleOutline } from "react-icons/io5";
 import 'react-toastify/dist/ReactToastify.css';
 import { FaStar } from "react-icons/fa";
 
-function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
+function ReviewForm({ productId }) {
   const [rating, setRating] = useState(0); // Initialize rating with 0
   const [hoverRating, setHoverRating] = useState(0); // State for hover effect
   const [review, setReview] = useState("");
@@ -49,7 +48,6 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
       });
       setRating(0);
       setReview("");
-      setIsModalOpen(false);
     } catch (error) {
       toast.error("Error submitting review. Please try again.", {
         autoClose: 2000,
@@ -63,20 +61,9 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
     setRating(index);
   };
 
-  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-md z-[90]">
-      <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3 p-6 relative">
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-        >
-          <IoCloseCircleOutline
-            className="cursor-pointer text-2xl text-[#2E982D] hover:scale-125 transition duration-300 ease-in-out"
-            onClick={onClose}
-          />
-        </button>
+      <div className="relative max-w-[700px] mx-auto">
         {!token ? (
           <p className="text-center text-red-500">Login first to review this product!</p>
         ) : (
@@ -125,7 +112,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
               <div>
                 <button
                   type="submit"
-                  className="w-full py-2 px-4 bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 text-white font-semibold rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-[15px] lg:text-base mt-2"
+                  className="w-[170px] block mx-auto py-4 px-4 bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 text-white font-semibold shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-[15px] lg:text-base mt-2"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Review"}
@@ -137,8 +124,7 @@ function ReviewModal({ isOpen, setIsModalOpen, onClose, productId }) {
 
         <ToastContainer />
       </div>
-    </div>
   );
 }
 
-export default ReviewModal;
+export default ReviewForm;

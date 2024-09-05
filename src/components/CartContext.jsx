@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product) => {
+  const addToCart1 = (product) => {
     setCart((prevCart) => {
       const productIndex = prevCart.findIndex((item) => item._id === product._id);
       if (productIndex !== -1) {
@@ -33,6 +33,25 @@ export const CartProvider = ({ children }) => {
       return [...prevCart, { ...product, quantity: 1 }];
     });
   };
+
+  const addToCart = (product, quantityToAdd) => {
+    setCart((prevCart) => {
+      const productIndex = prevCart.findIndex((item) => item._id === product._id);
+      if (productIndex !== -1) {
+        const newCart = [...prevCart];
+        newCart[productIndex].quantity += quantityToAdd;
+        toast.success(`${product.name} quantity updated in cart!`, {
+          autoClose: 2000,
+        });
+        return newCart;
+      }
+      toast.success(`${product.name} added to cart!`, {
+        autoClose: 2000,
+      });
+      return [...prevCart, { ...product, quantity: quantityToAdd }];
+    });
+  };
+  
 
   const removeFromCart = (productId) => {
     setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
@@ -57,7 +76,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateCartItem }}>
+    <CartContext.Provider value={{ cart, addToCart1, addToCart, removeFromCart, updateCartItem }}>
       {children}
       <ToastContainer />
     </CartContext.Provider>

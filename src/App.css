@@ -67,35 +67,6 @@
 .z-10 {
   z-index: -1;
 }
-.hero-background {
-  background-image: url("./assets/images/all-products-1.jpeg");
-  background-size: cover;
-  background-position: top center;
-  height: 100vh;
-}
-.hero-background-1 {
-  background-image: url("./assets/images/about-us.jpeg");
-  background-size: cover;
-  background-position: top center;
-  height: 100vh;
-}
-.hero-background-2 {
-  background-image: url("./assets/images/contact-us.jpeg");
-  background-size: cover;
-  background-position: top center;
-  height: 100vh;
-}
-
-
-@media screen and (min-width: 1000px) {
-  .hero-background-3 {
-    background-image: url("./assets/images/about-shape-3.png");
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-  
-}
 .rewiew-background{
   background-image: url('./assets/images/video-shape-1.png');
   background-size:auto;
