@@ -60,7 +60,7 @@ const ContactUs = () => {
                 className="block border p-3 lg:p-4 rounded-sm mb-5 w-full resize-none placeholder:text-[13px] text-[13px] placeholder:lg:text-base lg:text-base focus:outline-none focus:border-[#2E982D] focus:transition focus:duration-500 focus:ease-in-out"
                 required
               ></textarea>
-              <button className="bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl transition duration-300 ease-in-out text-white font-semibold text-sm p-4">
+              <button className="bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-xl transition duration-300 ease-in-out text-white font-semibold text-[13px] md:text-[14px] p-4">
                 Send Message
               </button>
             </form>

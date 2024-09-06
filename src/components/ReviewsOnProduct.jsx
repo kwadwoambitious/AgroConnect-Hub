@@ -45,16 +45,16 @@ const ReviewsOnProduct = ({ productId }) => {
   };
 
   return (
-      <div className="bg-white rounded-lg py-6">
-        <div className="flex justify-between items-center mb-7">
-          <h2 className="text-xl font-semibold text-gray-700">
-            Review Details ({reviewData.length})
+      <div className="bg-white rounded-lg ">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-base lg:text-lg font-semibold text-[#071C1F]">
+            Reviews ({reviewData.length})
           </h2>
         </div>
         <div>
           {isLoading ? (
-            <div className="flex items-center justify-center flex-col">
-              <div className="submit-loader2 mx-auto mt-10"></div>
+            <div className="flex items-center justify-start flex-col">
+              <div className="submit-loader2 mt-10"></div>
               <p className="text-[13px] lg:text-base text-center mt-2 font-semibold">
                 Loading Details...
               </p>
@@ -65,10 +65,10 @@ const ReviewsOnProduct = ({ productId }) => {
             reviewData.map((review) => (
               <div key={review._id} className="mb-6">
                 <div className="flex items-center">
-                  <div className="bg-[#2E982D] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-2">
+                  <div className="bg-[#2E982D] text-white rounded-full w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center  text-[11px] lg:text-[13px] font-bold mr-2">
                     {getInitials(review.user.name)}
                   </div>
-                  <p className="text-gray-600 font-semibold">
+                  <p className="text-[#071C1F] font-semibold text-[12px] lg:text-[14px]">
                     {review.user.name}
                   </p>
                 </div>
@@ -77,7 +77,7 @@ const ReviewsOnProduct = ({ productId }) => {
                     {[...Array(5)].map((_, index) => (
                       <span
                         key={index}
-                        className={`text-[13px] ${
+                        className={`text-[12px] ${
                           index < review.rating
                             ? "text-[#ffc107]"
                             : "text-gray-300"
@@ -87,11 +87,11 @@ const ReviewsOnProduct = ({ productId }) => {
                       </span>
                     ))}
                   </div>
-                  <p className="text-gray-500 text-[13px] inline-block ml-2 font-medium">
+                  <p className="text-gray-500 text-[11px] inline-block ml-2 font-medium">
                     {formatDate(review.createdAt)}
                   </p>
                 </div>
-                <p className="text-gray-600 text-sm">{review.review}</p>
+                <p className="text-[#071C1F] text-[13px] lg:text-sm">{review.review}</p>
               </div>
             ))
           ) : (

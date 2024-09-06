@@ -63,13 +63,13 @@ function ReviewForm({ productId }) {
 
 
   return (
-      <div className="relative max-w-[700px] mx-auto">
+      <div className="relative max-w-[500px]">
         {!token ? (
           <p className="text-center text-red-500">Login first to review this product!</p>
         ) : (
           <>
-            <h2 className="text-xl lg:text-2xl font-semibold mb-4 text-center text-gray-700">
-              Submit Your Review
+            <h2 className="text-base lg:text-lg font-semibold mb-4 text-gray-700">
+             Write a review
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -112,7 +112,7 @@ function ReviewForm({ productId }) {
               <div>
                 <button
                   type="submit"
-                  className="w-[170px] block mx-auto py-4 px-4 bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 text-white font-semibold shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-[15px] lg:text-base mt-2"
+                  className="w-[170px] block mx-auto lg:mx-0 py-4 px-4 bg-[#2E982D] hover:bg-[#1e6a1e] transition duration-300 text-white font-semibold shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-[13px] md:text-[14px] mt-2"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Review"}

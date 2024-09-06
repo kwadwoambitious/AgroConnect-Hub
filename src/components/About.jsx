@@ -81,7 +81,7 @@ const About = () => {
               !showValues
                 ? "bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl text-white"
                 : "border border-[#2E982D] text-[#2E982D]"
-            }  md:text-lg font-semibold`}
+            }  text-[13px] md:text-[14px] font-semibold`}
           >
             Our Missions
           </button>
@@ -91,7 +91,7 @@ const About = () => {
               showValues
                 ? "bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-2xl text-white"
                 : "border border-[#2E982D] text-[#2E982D]"
-            } md:text-lg font-semibold`}
+            } text-[13px] md:text-[14px] font-semibold`}
           >
             Our Values
           </button>

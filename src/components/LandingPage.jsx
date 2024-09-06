@@ -44,7 +44,7 @@ const LandingPage = () => {
                 <div>
                   <Link
                   to="/register"
-                  className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 w-[133px] md:w-[145px] lg:mx-0 py-[16px] text-sm md:text-base font-semibold relative group block text-center"
+                  className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 w-[133px] md:w-[145px] lg:mx-0 py-[16px] text-[13px] md:text-[14px] font-semibold relative group block text-center"
                 >
                   Get Started
                   <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">
@@ -91,7 +91,7 @@ const LandingPage = () => {
         </p>
         <Link
           to="/login"
-          className="bg-[#ffffff] hover:bg-[#f0f0f0] shadow-xl transition duration-300 ease-in-out mt-10 px-4 w-[140px] text-center block py-[16px] text-sm md:text-base font-semibold text-[#2E982D] mx-auto relative group"
+          className="bg-[#ffffff] hover:bg-[#f0f0f0] shadow-xl transition duration-300 ease-in-out mt-10 px-4 w-[140px] text-center block py-[16px] text-[13px] md:text-[14px] font-semibold text-[#2E982D] mx-auto relative group"
         >
           Login now
           <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">

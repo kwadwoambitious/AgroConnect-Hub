@@ -119,7 +119,7 @@ const ProductDetails = () => {
               <p className="text-[#2E982D] mt-1 font-medium text-[22px] lg:text-[27px] mb-5">
                 GH₵{product.price}
               </p>
-              <p className="text-[#071C1F] text-[15px] font-normal mb-6">
+              <p className="text-[#071C1F] text-justify text-[14px] lg:text-[15px] font-normal mb-6 shortened-text">
                 {product.description}
               </p>
               <hr className="mb-6" />
@@ -186,7 +186,7 @@ const ProductDetails = () => {
                 </button>
 
                 <button
-                  className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[12px] md:text-[14px] mx-auto p-[16px] ml-4 font-semibold"
+                  className="block bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white w-[100%] text-[13px] md:text-[14px] mx-auto p-[16px] ml-4 font-semibold"
                   onClick={() => addToCart(product, quantityToAdd)}
                   disabled={quantityToAdd === product.quantity}
                 >
@@ -203,30 +203,30 @@ const ProductDetails = () => {
         {/* Buttons to toggle between description and reviews */}
         <div className="flex gap-1 my-6 border-b">
           <button
-            className={`px-4 py-2 hover:text-[#2E982D] text-[12px] lg:text-base ${
+            className={`px-4 py-2 hover:text-[#2E982D] text-[12px] lg:text-base font-medium ${
               activeSection === "description"
                 ? "text-[#2E982D] border-b border-b-[#2E982D]"
-                : "bg-white text-[#071C1F]"
+                : "text-[#071C1F]"
             }`}
             onClick={() => setActiveSection("description")}
           >
             Description
           </button>
           <button
-            className={`px-4 py-2 hover:text-[#2E982D] text-[12px] lg:text-base ${
+            className={`px-4 py-2 hover:text-[#2E982D] text-[12px] lg:text-base font-medium ${
               activeSection === "add-review"
                 ? "text-[#2E982D] border-b border-b-[#2E982D]"
-                : "bg-white text-[#071C1F]"
+                : " text-[#071C1F]"
             }`}
             onClick={() => setActiveSection("add-review")}
           >
             Add Review
           </button>
           <button
-            className={`px-4 py-2 hover:text-[#2E982D] text-[12px] lg:text-base ${
+            className={`px-4 py-2 hover:text-[#2E982D] text-[12px] lg:text-base font-medium ${
               activeSection === "see-reviews"
                 ? "text-[#2E982D] border-b border-b-[#2E982D]"
-                : "bg-white text-[#071C1F]"
+                : "text-[#071C1F]"
             }`}
             onClick={() => setActiveSection("see-reviews")}
           >
@@ -236,7 +236,7 @@ const ProductDetails = () => {
 
         {/* Conditionally render based on active section */}
         {activeSection === "description" && product && (
-          <p className="text-[#071C1F] text-[15px] font-normal mb-6">
+          <p className="text-[#071C1F] text-[14px] text-justify lg:text-[15px] font-normal mb-6">
             {product.description}
           </p>
         )}

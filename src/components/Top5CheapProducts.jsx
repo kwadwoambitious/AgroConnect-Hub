@@ -106,7 +106,7 @@ const Top5CheapProducts = () => {
           </div>
           <Link
             to="/shop"
-            className="mt-8 font-semibold text-sm md:text-[15px] bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-xl transition duration-300 ease-in-out text-white py-[16px] group w-[165px] md:w-[180px] mx-auto block text-center"
+            className="mt-8 font-semibold text-[13px] md:text-[14px] bg-[#2E982D] hover:bg-[#1e6a1e] hover:shadow-xl transition duration-300 ease-in-out text-white py-[16px] group w-[165px] md:w-[180px] mx-auto block text-center"
           >
             View all Products
             <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">

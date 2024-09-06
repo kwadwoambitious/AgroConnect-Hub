@@ -115,6 +115,13 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+.shortened-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 @keyframes spin {
   to {
