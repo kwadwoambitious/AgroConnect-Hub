@@ -37,14 +37,14 @@ const LandingPage = () => {
           <div className="w-full md:grid md:grid-cols-2 lg:grid min-h-screen lg:grid-cols-2 pt-[110px]">
             <div className="flex items-center justify-center py-10 lg:py-12 lg:px-32 relative">
               <div className="mx-auto w-[450px] lg:w-[700px] px-4 sm:px-8 md:pl-14 lg:p-0">
-                <h1 className="lg:mb-4 mb-3 text-[30px] font-extrabold leading-none tracking-tight md:text-4xl lg:text-4xl z-30 text-[#2E982D]">
+                <h1 className="lg:mb-4 mb-3 text-[30px] font-extrabold leading-none tracking-tight md:text-4xl lg:text-4xl z-30 text-[#2E982D] text-center md:text-left">
                 Transforming Agriculture Through Direct Connections
                 </h1>
-                <p className="text-[#111827] font-medium">Experience the future of agriculture with our platform designed to foster direct relationships and enhance market access.</p>
+                <p className="text-[#111827] font-medium text-center md:text-left">Experience the future of agriculture with our platform designed to foster direct relationships and enhance market access.</p>
                 <div>
                   <Link
                   to="/register"
-                  className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 w-[133px] md:w-[145px] lg:mx-0 py-[16px] text-[13px] md:text-[14px] font-semibold relative group block text-center"
+                  className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 w-[133px] md:w-[145px] mx-auto lg:mx-0 py-[16px] text-[13px] md:text-[14px] font-semibold relative group block text-center"
                 >
                   Get Started
                   <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1">
