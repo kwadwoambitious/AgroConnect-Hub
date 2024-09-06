@@ -32,15 +32,18 @@ const LandingPage = () => {
 
         {/* hero section container */}
         {/* <div className="bg-[#2E982D] lg:w-[50%] h-full absolute "></div> */}
-          <div className="w-full md:grid md:grid-cols-2 lg:grid min-h-screen lg:grid-cols-2 pt-[110px]">
-            <div className="flex items-center justify-center py-10 lg:py-12 lg:px-32 relative">
-              <div className="mx-auto w-[450px] lg:w-[700px] px-4 sm:px-8 md:pl-14 lg:p-0">
-                <h1 className="lg:mb-4 mb-3 text-[30px] font-extrabold leading-none tracking-tight md:text-4xl lg:text-4xl z-30 text-[#2E982D] text-center md:text-left">
+        <div className="w-full md:grid md:grid-cols-2 lg:grid min-h-screen lg:grid-cols-2 pt-[110px]">
+          <div className="flex items-center justify-center py-10 lg:py-12 lg:px-32 relative">
+            <div className="mx-auto w-[450px] lg:w-[700px] px-4 sm:px-8 md:pl-14 lg:p-0">
+              <h1 className="lg:mb-4 mb-3 text-[30px] font-extrabold leading-none tracking-tight md:text-4xl lg:text-4xl z-30 text-[#2E982D] text-center md:text-left">
                 Transforming Agriculture Through Direct Connections
-                </h1>
-                <p className="text-[#111827] font-medium text-center md:text-left">Experience the future of agriculture with our platform designed to foster direct relationships and enhance market access.</p>
-                <div>
-                  <Link
+              </h1>
+              <p className="text-[#111827] font-medium text-center md:text-left">
+                Experience the future of agriculture with our platform designed
+                to foster direct relationships and enhance market access.
+              </p>
+              <div>
+                <Link
                   to="/register"
                   className="bg-[#2E982D] hover:bg-[#1e6a1e] shadow-[0px_0px_15px_1px_rgba(0,0,0,0.1);] transition duration-300 ease-in-out text-white mt-8 px-4 w-[133px] md:w-[145px] mx-auto lg:mx-0 py-[16px] text-[13px] md:text-[14px] font-semibold relative group block text-center"
                 >
@@ -49,29 +52,29 @@ const LandingPage = () => {
                     <MdOutlineKeyboardDoubleArrowRight className="inline-block text-xl font-bold" />
                   </span>
                 </Link>
-                </div>
               </div>
             </div>
-
-            <div className="bg-muted lg:block px-4 md:px-0 relative">
-              {!imageLoaded && (
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-xl z-[90]">
-                  <span className="text-gray-500 font-medium">
-                    Image Loading...
-                  </span>
-                </div>
-              )}
-              <img
-                loading="lazy"
-                src={heroImage}
-                alt="hero section image"
-                className={`transition-opacity duration-1000  w-full object-cover ${
-                  imageLoaded ? "opacity-100" : "opacity-0"
-                }`}
-                onLoad={handleImageLoad}
-              />
-            </div>
           </div>
+
+          <div className="bg-muted lg:block px-4 md:px-0 relative">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-xl z-[90]">
+                <span className="text-gray-500 font-medium">
+                  Image Loading...
+                </span>
+              </div>
+            )}
+            <img
+              loading="lazy"
+              src={heroImage}
+              alt="hero section image"
+              className={`transition-opacity duration-1000  w-full object-cover ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              onLoad={handleImageLoad}
+            />
+          </div>
+        </div>
       </div>
       {/* container for the navbar and the hero section ends here */}
 
