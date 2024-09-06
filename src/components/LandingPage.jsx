@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import heroImage from "../assets/images/new-hero.png";
-import clientImage from "../assets/images/client-1.webp";
-import clientImage2 from "../assets/images/client-2.webp";
-import { BiSolidQuoteLeft, BiSolidQuoteRight } from "react-icons/bi";
 import FAQSection from "./FAQSection";
 import logo from "../assets/images/LOGO.png";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { BiLogInCircle } from "react-icons/bi";
 import Top5CheapProducts from "./Top5CheapProducts";
+import UserReviews from "./UserReviews";
 
 const LandingPage = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -103,68 +101,7 @@ const LandingPage = () => {
       {/* login banner ends here */}
 
       {/* user's reviews section */}
-      <div className="px-5 lg:px-20 py-28 bg-white rewiew-background">
-        <h2 className="font-extrabold text-[25px] sm:text-[40px] mb-2 text-center text-[#111827]">
-          What Our Customers Say
-        </h2>
-        <p className="font-normal md:text-lg text-center text-[#6B7280]">
-          Here's what our satisfied consumers are saying!
-        </p>
-        <div className="flex items-center justify-center mt-12 sm:mt-14 gap-y-14 gap-x-24 flex-wrap">
-          {/* first review */}
-          <div className="w-[370px] sm:w-[350px] pt-32 rounded-[15px] transition duration-100 ease-in-out bg-[#0e7d041b] relative">
-            <img
-              loading="lazy"
-              src={clientImage}
-              alt="consumer image"
-              className="absolute top-[50px] left-1/2 transform -translate-x-1/2 block mx-auto rounded-full w-[100px] h-[100px] object-cover border-[6px] border-white"
-            />
-
-            <div className=" bg-[#2E982D] rounded-b-[15px] rounded-t-3xl text-white pb-6">
-              <p className="w-[90%] mx-auto text-left font-medium text-[14px] md:text-[14px] px-10 pt-16 relative">
-                <BiSolidQuoteLeft className="absolute left-[10px] top-[40px] text-3xl" />
-                Connecting with local farmers through this project has
-                completely changed how I shop for food. It's so easy to get
-                fresh produce and support small-scale farmers. The transparency
-                is a game-changer, too. I love knowing exactly where my food
-                comes from!
-                <BiSolidQuoteRight className="absolute right-[10px] -bottom-[20px] text-3xl" />
-              </p>
-              <p className="font-medium text-base md:text-lg text-center mt-6">
-                <span className="font-dancingscript text-2xl">by</span> OSEI
-                JOSEPH
-              </p>
-            </div>
-          </div>
-          {/* first review ends here */}
-
-          {/* second review */}
-          <div className="w-[370px] sm:w-[350px] pt-32 rounded-[15px] transition duration-100 ease-in-out bg-[#0e7d041b] relative">
-            <img
-              loading="lazy"
-              src={clientImage2}
-              alt="consumer image 2"
-              className="absolute top-[50px] left-1/2 transform -translate-x-1/2 block mx-auto rounded-full w-[100px] h-[100px] object-cover border-[6px] border-white"
-            />
-
-            <div className="bg-[#2E982D] rounded-b-[15px] rounded-t-3xl text-white pb-6">
-              <p className="w-[90%] mx-auto text-left font-medium text-[14px] md:text-[14px] px-10 pt-16 relative">
-                <BiSolidQuoteLeft className="absolute left-[10px] top-[40px] text-3xl" />
-                This project is a game-changer for busy urbanites like me. With
-                just a few clicks, I can access top-quality, locally sourced
-                produce directly from farmers. It's convenient, transparent, and
-                supports sustainable agriculture. A win-win all around!
-                <BiSolidQuoteRight className="absolute right-[10px] -bottom-[20px] text-3xl" />
-              </p>
-              <p className="font-medium text-base md:text-lg text-center mt-6">
-                <span className="font-dancingscript text-2xl">by</span> ASARE
-                FELICIA
-              </p>
-            </div>
-          </div>
-          {/* second review ends here */}
-        </div>
-      </div>
+      <UserReviews />
       {/* user's reviews section ends here */}
 
       {/* faqs section */}
