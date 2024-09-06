@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import people from "./data";
+import reviews from "./data";
 import { FaChevronLeft, FaChevronRight, FaQuoteRight } from "react-icons/fa";
 
 const UserReviews = () => {
   const [index, setIndex] = useState(0);
-  const { name, job, image, text } = people[index];
+  const { name, job, image, text } = reviews[index];
 
   const checkNumber = (number) => {
-    if (number > people.length - 1) {
+    if (number > reviews.length - 1) {
       return 0;
     } else if (number < 0) {
-      return people.length - 1;
+      return reviews.length - 1;
     }
     return number;
   };
@@ -28,6 +28,7 @@ const UserReviews = () => {
       return checkNumber(newIndex);
     });
   };
+
   return (
     <div className="px-5 lg:px-20 py-28 bg-white rewiew-background">
       <h2 className="font-extrabold text-[25px] sm:text-[40px] mb-2 text-center text-[#111827]">
@@ -39,7 +40,7 @@ const UserReviews = () => {
       <div>
         <div className="underline mt-12 sm:mt-14"></div>
       </div>
-      <article className="review ">
+      <article className="review" key={index}>
         <div className="img-container">
           <img src={image} alt={name} className="person-img" />
           <span className="quote-icon">
