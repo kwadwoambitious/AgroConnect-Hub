@@ -7,7 +7,7 @@ import "../App.css";
 import { useCart } from "./CartContext";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { StarRating } from "./StarRating";
-import { FaRegEye, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -81,44 +81,35 @@ const AllProducts = () => {
                   {!loaded[index] && (
                     <div className="absolute inset-0 bg-gray-300 blur-sm"></div>
                   )}
-
-                  {/* Hello text that appears on hover */}
-                  <div className="bg-[#0000004b] absolute inset-0 flex items-center justify-center  text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                    <div className="flex items-center justify-center -translate-y-3 group-hover:translate-y-0 transition delay-100 duration-[300ms] z-10">
-                      <Link to={`/details/${product._id}`}>
-                        <div className="bg-white p-3 rounded-full">
-                          <FaRegEye className="text-[#111827] text-[15px]" />
-                        </div>
-                      </Link>
-                      <div
-                        className="bg-white p-3 rounded-full ml-3 cursor-pointer"
-                        onClick={() => addToCart1(product)}
-                      >
-                        <FaShoppingCart className="text-[#111827] text-[15px]" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Image with hover effect */}
-                  <img
-                    loading="lazy"
-                    src={product.imageCover}
-                    alt={product.name}
-                    className="w-full h-44 object-cover transition duration-500 ease-in-out transform hover:scale-105 z-10"
-                  />
+                  <Link to={`/details/${product._id}`}>
+                    <img
+                      loading="lazy"
+                      src={product.imageCover}
+                      alt={product.name}
+                      className="w-full h-44 object-cover transition duration-500 ease-in-out transform hover:scale-105 z-10"
+                    />
+                  </Link>
                 </div>
-                <div className="bg-white py-4 w-full">
-                  <h3 className="text-[13px] md:text-[16px] text-center font-semibold text-[#111827] mb-1">
+                <div className="bg-white py-4 w-full px-4">
+                  <h3 className="text-[13px] md:text-[16px] font-semibold text-[#111827] mb-1">
                     {product.name}
                   </h3>
-                  <p className="text-[#2E982D] text-[12px] md:text-[20px] text-center font-medium mb-1">
-                    GH₵{product.price}
-                  </p>
-                  <div className="flex justify-center">
+                  <div className="flex justify-start mb-1">
                     <StarRating
                       ratingsAverage={product.ratingsAverage}
                       className="block mx-auto"
                     />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#2E982D] text-[12px] md:text-[17px] font-medium">
+                      GH₵{product.price}
+                    </p>
+                    <div
+                      className="bg-white p-3 rounded-full cursor-pointer shadow-[0_5px_15px_rgba(0,0,0,0.1);] transition-all duration-300 ease-in-out hover:shadow-[0_5px_15px_rgba(0,0,0,0.2);]"
+                      onClick={() => addToCart1(product)}
+                    >
+                      <FaShoppingCart className="text-[#2E982D] text-[15px]" />
+                    </div>
                   </div>
                 </div>
               </div>

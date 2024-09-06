@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/images/LOGO.png";
-import aboutImage from "../assets/images/login-image.jpg";
+import aboutImage from "../assets/images/landing-hero.png";
 import { GiAchievement, GiTeacher } from "react-icons/gi";
 import { FaPeopleCarry, FaCheckCircle, FaLightbulb } from "react-icons/fa";
 import { MdVisibility } from "react-icons/md";
@@ -37,9 +37,9 @@ const About = () => {
       {/* navBar component ends here */}
 
       <div className="flex items-center justify-center lg:gap-x-10 px-5 xl:px-32 py-40 lg:py-40">
-        <div>
+        <div className="bg-muted lg:block relative">
           {!imageLoaded && (
-            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-xl z-[90]">
+            <div className="absolute inset-0 bg-gray-200 items-center hidden lg:block justify-center rounded-xl z-[90]">
               <span className="text-gray-500 font-medium">
                 Image Loading...
               </span>

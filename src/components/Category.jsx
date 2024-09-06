@@ -7,13 +7,12 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { useCart } from "./CartContext";
 import { StarRating } from "./StarRating";
-import { FaRegEye, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Category = () => {
   const { categoryName } = useParams(); // Get the category from the URL
   const [products, setProducts] = useState([]); // Initialize as an empty array
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [error, setError] = useState(null); // State for handling errors
   const [loading, setLoading] = useState(true); // State for handling loading
   const [loaded, setLoaded] = useState(Array(products.length).fill(false));
@@ -28,12 +27,14 @@ const Category = () => {
     setFilteredProducts(filtered);
   }, [searchTerm, filteredProducts]);
 
-  const normalizeString = (str) =>
-    str
+  const normalizeString = (str) => {
+    if (!str) return "";
+    return str
       .replace(/\s+/g, "")
       .replace(/[^\w]/g, "")
       .replace(/and/g, "")
       .toLowerCase();
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -59,10 +60,12 @@ const Category = () => {
     if (products && products.length > 0) {
       const normalizedCategoryName = normalizeString(categoryName);
       console.log("category", normalizedCategoryName);
-      const filtered = products.filter(
-        (product) =>
-          normalizeString(product.categories) === normalizedCategoryName
-      );
+
+      const filtered = products.filter((product) => {
+        // Check if product.categories is defined before normalizing it
+        return normalizeString(product.categories) === normalizedCategoryName;
+      });
+
       setFilteredProducts(filtered);
     }
   }, [products, categoryName]);
@@ -100,7 +103,8 @@ const Category = () => {
           {formattedCategoryName}
         </h1>
         <p className="text-[23px] sm:text-[30px] text-center font-semibold text-[#111827]">
-          ({filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"})
+          ({filteredProducts.length}{" "}
+          {filteredProducts.length === 1 ? "product" : "products"})
         </p>
         {loading ? (
           <>
@@ -111,54 +115,45 @@ const Category = () => {
           <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-0 md:gap-5 md:gap-y-12">
             {filteredProducts.map((product, index) => (
               <div
-              key={product._id}
-              className="bg-white shadow-[0px_0px_19px_1px_rgba(0,0,0,0.1);] max-w-[250px] md:max-w-[250px]  mx-auto w-full mb-[24px] relative"
-            >
-              <div className="relative w-full md:h-44 h-44 overflow-hidden group">
-                {!loaded[index] && (
-                  <div className="absolute inset-0 bg-gray-300 blur-sm"></div>
-                )}
-
-                {/* Hello text that appears on hover */}
-                <div className="bg-[#0000004b] absolute inset-0 flex items-center justify-center  text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                  <div className="flex items-center justify-center -translate-y-3 group-hover:translate-y-0 transition delay-100 duration-[300ms] z-10">
-                    <Link to={`/details/${product._id}`}>
-                      <div className="bg-white p-3 rounded-full">
-                        <FaRegEye className="text-[#111827] text-[15px]" />
-                      </div>
-                    </Link>
+                key={product._id}
+                className="bg-white shadow-[0px_0px_19px_1px_rgba(0,0,0,0.1);] max-w-[250px] md:max-w-[250px]  mx-auto w-full mb-[24px] relative"
+              >
+                <div className="relative w-full md:h-44 h-44 overflow-hidden group">
+                  {!loaded[index] && (
+                    <div className="absolute inset-0 bg-gray-300 blur-sm"></div>
+                  )}
+                  <Link to={`/details/${product._id}`}>
+                    <img
+                      loading="lazy"
+                      src={product.imageCover}
+                      alt={product.name}
+                      className="w-full h-44 object-cover transition duration-500 ease-in-out transform hover:scale-105 z-10"
+                    />
+                  </Link>
+                </div>
+                <div className="bg-white py-4 w-full px-4">
+                  <h3 className="text-[13px] md:text-[16px] font-semibold text-[#111827] mb-1">
+                    {product.name}
+                  </h3>
+                  <div className="flex justify-start mb-1">
+                    <StarRating
+                      ratingsAverage={product.ratingsAverage}
+                      className="block mx-auto"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#2E982D] text-[12px] md:text-[17px] font-medium">
+                      GH₵{product.price}
+                    </p>
                     <div
-                      className="bg-white p-3 rounded-full ml-3 cursor-pointer"
+                      className="bg-white p-3 rounded-full cursor-pointer shadow-[0_5px_15px_rgba(0,0,0,0.1);] transition-all duration-300 ease-in-out hover:shadow-[0_5px_15px_rgba(0,0,0,0.2);]"
                       onClick={() => addToCart1(product)}
                     >
-                      <FaShoppingCart className="text-[#111827] text-[15px]" />
+                      <FaShoppingCart className="text-[#2E982D] text-[15px]" />
                     </div>
                   </div>
                 </div>
-
-                {/* Image with hover effect */}
-                <img
-                  loading="lazy"
-                  src={product.imageCover}
-                  alt={product.name}
-                  className="w-full h-44 object-cover transition duration-500 ease-in-out transform hover:scale-105 z-10"
-                />
               </div>
-              <div className="bg-white py-4 w-full">
-                <h3 className="text-[13px] md:text-[16px] text-center font-semibold text-[#111827] mb-1">
-                  {product.name}
-                </h3>
-                <p className="text-[#2E982D] text-[12px] md:text-[20px] text-center font-medium mb-1">
-                  GH₵{product.price}
-                </p>
-                <div className="flex justify-center">
-                  <StarRating
-                    ratingsAverage={product.ratingsAverage}
-                    className="block mx-auto"
-                  />
-                </div>
-              </div>
-            </div>
             ))}
           </div>
         ) : (
