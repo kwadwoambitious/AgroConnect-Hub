@@ -6,7 +6,6 @@ import logo from "../assets/images/LOGO.png";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { useCart } from "./CartContext";
-import ProductDetailsModal from "./Modals/ProductDetailsModal";
 import { StarRating } from "./StarRating";
 import { FaRegEye, FaShoppingCart } from "react-icons/fa";
 
@@ -170,13 +169,6 @@ const Category = () => {
       </div>
 
       <Footer />
-
-      {selectedProduct && (
-        <ProductDetailsModal
-          product={selectedProduct}
-          onClose={handleCloseModal}
-        />
-      )}
     </>
   );
 };

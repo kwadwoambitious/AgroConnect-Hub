@@ -3,7 +3,6 @@ import axios from "axios";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useCart } from "./CartContext";
-import ProductDetailsModal from "./Modals/ProductDetailsModal";
 import { StarRating } from "./StarRating";
 import { FaRegEye, FaShoppingCart } from "react-icons/fa";
 
@@ -118,13 +117,6 @@ const Top5CheapProducts = () => {
         <p className="text-center text-lg lg:text-xl mt-8 text-red-500">
           No products were found.
         </p>
-      )}
-
-      {selectedProduct && (
-        <ProductDetailsModal
-          product={selectedProduct}
-          onClose={handleCloseModal}
-        />
       )}
     </div>
   );
