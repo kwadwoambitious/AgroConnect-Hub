@@ -85,10 +85,10 @@ const LandingPage = () => {
       {/* login banner */}
       <div className="bg-gradient-to-tr from-[#0F320F] to-[#2E982D] px-5 2xl:px-20 py-28 lg:py-40">
         <h2 className="text-[25px] md:text-[45px] text-center text-white font-extrabold sm:max-w-4xl mx-auto mb-2 leading-[1.2]">
-          Experience our service, providing you with fresh and healthy products!
+        Bridging Farmers and Buyers for Seamless Trade and Shared Success.
         </h2>
-        <p className="font-normal md:text-lg text-center text-white">
-          Let the greatest journey begin!
+        <p className="font-normal md:text-lg text-center text-white max-w-[700px] mx-auto">
+        Sign in to access tools, markets, and resources designed for both farmers and buyers, facilitating smooth transactions and mutual growth.
         </p>
         <Link
           to="/login"
