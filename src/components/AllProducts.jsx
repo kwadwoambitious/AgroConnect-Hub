@@ -5,7 +5,7 @@ import logo from "../assets/images/LOGO.png";
 import Footer from "./Footer";
 import "../App.css";
 import { useCart } from "./CartContext";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
 import { StarRating } from "./StarRating";
 import { FaShoppingCart } from "react-icons/fa";
 
@@ -15,11 +15,15 @@ const AllProducts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(Array(products.length).fill(false));
+  const [range, setRange] = useState("");
   const { addToCart1 } = useCart();
+  const userLocation = JSON.parse(localStorage.getItem("userLocation"));
 
+  // Fetch all products initially or when range is empty
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           "https://api-agroconnect.onrender.com/api/v1/products"
         );
@@ -27,12 +31,34 @@ const AllProducts = () => {
         setFilteredProducts(response.data.data.data);
         setLoading(false);
       } catch (error) {
-        // Handle error
+        console.error("Error fetching all products:", error);
+        setLoading(false);
       }
     };
 
-    fetchProducts();
-  }, []);
+    // Fetch products if range is empty
+    if (!range) {
+      fetchProducts();
+    }
+  }, [range]);
+
+  const fetchRangeProducts = async () => {
+    if (userLocation && range) {
+      try {
+        setLoading(true); // Start loading when fetching products
+        const { latitude, longitude } = userLocation;
+        const response = await axios.get(
+          `https://api-agroconnect.onrender.com/api/v1/products/products-within/${range}/center/${latitude},${longitude}`
+        );
+        setProducts(response.data.data.data);
+        setFilteredProducts(response.data.data.data);
+        setLoading(false); // Stop loading after fetching
+      } catch (error) {
+        console.error("Error fetching products by range:", error);
+        setLoading(false); // Stop loading in case of error
+      }
+    }
+  };
 
   useEffect(() => {
     const filtered = products.filter((product) =>
@@ -54,14 +80,33 @@ const AllProducts = () => {
 
         {/* Search Bar */}
         <div className="fixed top-[90px] left-0 right-0 bg-[#2E982D] p-5 z-50">
-          <div className="flex justify-center">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            {/* Search Input */}
             <input
               type="text"
-              className="border rounded-full w-full max-w-md p-2 px-4 focus:outline-none focus:ring-1 lg:focus:ring-2 focus:ring-black text-[14px] lg:text-[15px]"
-              placeholder="Search for a product..."
+              className="border rounded-full w-full max-w-md p-2 px-4 focus:outline-none focus:ring-1 md:focus:ring-2 focus:ring-black text-[14px] lg:text-[15px]"
+              placeholder="Type product names here to search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+
+            {/* Range Input */}
+            <input
+              type="number"
+              id="range"
+              value={range}
+              onChange={(e) => setRange(e.target.value)}
+              className="border rounded-full w-full max-w-56 p-2 px-4 focus:outline-none focus:ring-1 md:focus:ring-2 focus:ring-black text-[14px]"
+              placeholder="Search range (in km)"
+            />
+
+            {/* Search Button */}
+            <button
+              onClick={fetchRangeProducts}
+              className="px-4 py-2 bg-[#FFF] hover:bg-[#f0f0f0] shadow-md transition duration-300 ease-in-out text-[#2E982D] font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-black"
+            >
+              Search
+            </button>
           </div>
         </div>
 
